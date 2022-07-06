@@ -1,0 +1,36 @@
+I am not happy with the default state of the main.json dictionary that ships with Plover. I
+appreciate all the effort that has clearly gone into it (and the rest of the project), but I see so
+many opportunities for better management working with such an important data file.
+
+I am aware of the https://github.com/didoesdigital/steno-dictionaries project. I plan to take
+inspiration from it as I go along.
+
+Ultimately, I would like to break up main.json into smaller, more reasonable dictionaries. I am
+doing this for a few reasons. First, as a learner, I don't like how there is so much flexibility
+for spellings, especially for common words. I would rather see a canonical outline for each word so
+I am practicing it in a consistent way. I would also like to remove a lot of the medical jargon
+which is distracting when I accidentally produce it. There are also a number of what look like
+conveniences (or perhaps even typos?) which have been encoded in to the dictionary.
+
+Here are a few thoughts I've had with regard to splitting up the dictionary. The following subsets
+of the dictionary should be split out into their own (smaller) dictionary, or else be deleted.
+
+Split out:
+
+- Propoer nouns
+- Any punctuation
+- Finger spelling
+- Control characters (TK-LS, etc)
+- Prefixes and Suffixes
+
+Delete
+
+- Obscure words
+- Words which contain inapproprate punctuation ("HAFRPB/STPHERPB": "African-Americans{?}").
+
+Lastly, I think there's a large amount of duplication in the dictionary due to fold-ins, or which
+are redundate due to prefixes or suffixes ("POEBG/ER": "poker")
+
+A useful reference for working these out is:
+
+https://github.com/openstenoproject/plover/wiki/Dictionary-Format
