@@ -22,6 +22,7 @@ Split out:
 - Finger spelling
 - Control characters (TK-LS, etc)
 - Prefixes and Suffixes
+- Numbers
 
 Delete
 
@@ -34,3 +35,23 @@ are redundate due to prefixes or suffixes ("POEBG/ER": "poker")
 A useful reference for working these out is:
 
 https://github.com/openstenoproject/plover/wiki/Dictionary-Format
+
+----------------------------------------------------------------------------------------------------
+Prefixes and suffixes
+
+I created a report (reports/affix_report.py) which gives a frequency breakdown of the prefixes and
+suffixes found in the main dictionary. There are about 1000 of each. There is a long tail of unused
+or rarely used affixes in both.
+
+I want to eventually do an analysis where we see which words in the main dictionary can be produced
+by a combination of a stem with and affixes. I imagine many of the outlines in the main dictionary
+will turn out to be redundant in this way.
+
+For example:
+
+    "A/SEPL/*L": "assemble",
+    "A/SEPL/*L/*ER": "assembler",
+    "A/SEPL/*L/-D": "assembled",
+
+The latter two outlines are unnecessary, since *ER is the suffix "{^er}" and -D is the suffix
+"{^ed}".
