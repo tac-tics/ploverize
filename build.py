@@ -1,8 +1,11 @@
+from collections import defaultdict
 import string
 import os.path
 import httpx
 import json
+import orthography
 from copy import copy
+import nltk
 
 
 def load_main_dictionary():
@@ -24,6 +27,9 @@ def load_dictionary(name):
 
     with open(filename) as infile:
         return json.load(infile)
+
+
+CMUDICT = nltk.corpus.cmudict.dict()
 
 
 LEFTS = "STKPWHR"
@@ -137,6 +143,151 @@ def is_proper_noun(word):
     return word != word.lower() and word != 'I'
 
 
+def filter_common_prefixes(dictionary):
+    new_dictionary = copy(dictionary)
+
+    prefixes = {
+        'A': 'a',
+        'EUPB': 'in',
+        'RE': 're',
+        'EBGS': 'ex',
+        'TKE': 'de',
+        'AOE': 'e',
+        'RAOE': 're',
+        'TKEUS': 'dis',
+        'UPB': 'un',
+        'EPB': 'en',
+        'EUPL': 'im',
+        'KAUPB': 'con',
+        'PRO': 'pro',
+        'PRE': 'pre',
+        'EUPBT': 'inter',
+        'EPL': 'em',
+        'EUR': 'ir',
+        'KA': 'ka',
+        'AB': 'ab',
+        'SE': 'se',
+    }
+
+    for outline, word in dictionary.items():
+        first_stroke = outline.split('/')[0]
+        base_outline = '/'.join(outline.split('/')[1:])
+
+        if base_outline not in dictionary:
+            continue
+
+        base_word = dictionary[base_outline]
+        prefix = prefixes.get(first_stroke)
+
+        if prefix and orthography.combine(prefix, base_word) == word:
+            #print('deleting', outline, word, '=', prefix, "+", base_word)
+            del new_dictionary[outline]
+
+    return new_dictionary
+
+
+def filter_common_suffixes(dictionary):
+    new_dictionary = copy(dictionary)
+
+    suffixes = {
+        '-G': 'ing',
+        '-D': 'ed',
+        '-S': 's',
+        '-Z': 's',
+        'EU': 'y',
+        'HR': 'l',
+        'ER': 'er',
+        'EUBG': 'ic',
+        'HREU': 'ly',
+        'ER': 'er',
+        'TEU': 'ty',
+        '*ER': 'er',
+#        'KWRA': 'a',
+        'KWREU': 'y',
+        '-BL': 'ble',
+        'REU': 'ly',
+        'ERS': 'ers',
+        '*PBS': 'iness',
+        'SEU': 'cy',
+        'EUS': 'is',
+        'A*L': 'al',
+        'KHREU': 'ically',
+        'T*EUF': 'tive',
+        'EUF': 'ive',
+        'K-L': 'cal',
+        'KWRAL': 'ial',
+        '*EUPB': 'in',
+        '*L': "le",
+        'PWHREU': 'bly',
+        'HRAR': 'lar',
+        '-LS': 'less',
+        'TAEUGS': 'tation',
+        'O*R': "or",
+#        '-L': "'ll",
+    }
+
+    for outline, word in dictionary.items():
+        last_stroke = outline.split('/')[-1]
+        base_outline = '/'.join(outline.split('/')[:-1])
+
+        if base_outline not in dictionary:
+            continue
+
+        base_word = dictionary[base_outline]
+        suffix = suffixes.get(last_stroke)
+
+        if suffix and orthography.combine(base_word, suffix) == word:
+            #print('deleting', outline, word, '=', base_word, "+", suffix)
+            del new_dictionary[outline]
+
+    return new_dictionary
+
+
+def filter_common_affixes(dictionary):
+    return filter_common_suffixes(filter_common_prefixes(dictionary))
+
+
+def filter_infolds(dictionary):
+    new_dictionary = copy(dictionary)
+
+    infolds = {
+        'S': 's',
+        'Z': 's',
+        'G': 'ing',
+        'D': 'ed',
+    }
+    for outline, word in dictionary.items():
+        for infold, suffix in infolds.items():
+            if outline.endswith(infold):
+                base_outline = outline[:-len(infold)]
+                base_word = dictionary.get(base_outline, '')
+                if orthography.combine(base_word, suffix) == word:
+                    #print('deleting infold', outline, word)
+                    del new_dictionary[outline]
+
+    return new_dictionary
+
+def can_pronounce(word):
+    return word in CMUDICT
+
+
+def canonicalize_outline(dictionary):
+    new_dictionary = copy(dictionary)
+
+    outlines_by_word = defaultdict(lambda: [])
+
+    for outline, word in dictionary.items():
+        outlines_by_word[word].append(outline)
+
+    for word, outlines in sorted(outlines_by_word.items(), reverse=True, key=lambda pair: len(pair[1])):
+        if len(outlines) > 1:
+#            print(word, 'deleting', len(outlines), 'outlines, keeping', outlines[0])
+            for outline in outlines[1:]:
+                del new_dictionary[outline]
+
+    return new_dictionary
+
+
 def main():
     dictionary = load_main_dictionary()
     save_dictionary('main', dictionary)
@@ -159,6 +310,21 @@ def main():
     multiword_dictionary, dictionary = split_dictionary(dictionary, is_multiword)
     save_dictionary('005.main', dictionary)
     save_dictionary('multiword_dictionary', multiword_dictionary)
+
+    dictionary = filter_common_affixes(dictionary)
+    save_dictionary('006.main', dictionary)
+
+    dictionary, cant_pronounce_dictionary = split_dictionary(dictionary, can_pronounce)
+    save_dictionary('007.main', dictionary)
+    save_dictionary('cant_pronounce', cant_pronounce_dictionary)
+
+    dictionary = filter_infolds(dictionary)
+    save_dictionary('008.main', dictionary)
+
+#    dictionary = canonicalize_outline(dictionary)
+#    save_dictionary('009.main', dictionary)
+
+    save_dictionary('final', dictionary)
 
 
 if __name__ == "__main__":
