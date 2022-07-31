@@ -55,3 +55,14 @@ For example:
 
 The latter two outlines are unnecessary, since *ER is the suffix "{^er}" and -D is the suffix
 "{^ed}".
+----------------------------------------------------------------------------------------------------
+Infolds
+
+Sometimes the Steno order allows a word that could be spelled out with suffixes to be spelled out in
+fewer strokes. For example:
+
+    "OFR": "offer",
+    "OFRS": "offers",
+    "OFRD": "offered",
+
+It's not clear how easy it is to detect these or to systematize them.
