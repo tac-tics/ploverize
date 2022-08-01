@@ -6,13 +6,18 @@ import json
 import orthography
 from copy import copy
 import nltk
+import shutil
+
+
+def load_net_dictionary(url):
+    response = httpx.get(url)
+    response.raise_for_status()
+    return response.json()
 
 
 def load_main_dictionary():
     url = 'https://raw.githubusercontent.com/openstenoproject/plover/1e4d8b3bff0b705d936f14d31d5997456c5823cf/plover/assets/main.json'
-    response = httpx.get(url)
-    response.raise_for_status()
-    return response.json()
+    return load_net_dictionary(url)
 
 
 def save_dictionary(name, dictionary):
@@ -267,8 +272,28 @@ def filter_infolds(dictionary):
 
     return new_dictionary
 
+
 def can_pronounce(word):
     return word in CMUDICT
+
+
+STENO_DICTIONARIES_URL = 'https://raw.githubusercontent.com/didoesdigital/steno-dictionaries/62e3c35ef4ee5508dd625acac3b036e4a4c20ed7'
+
+def filter_mistakes(dictionary):
+    new_dictionary = copy(dictionary)
+
+    bad_habits_dictionary = load_net_dictionary(f'{STENO_DICTIONARIES_URL}/dictionaries/bad-habits.json')
+    misstrokes_dictionary = load_net_dictionary(f'{STENO_DICTIONARIES_URL}/dictionaries/misstrokes.json')
+
+    for outline in bad_habits_dictionary:
+        if outline in new_dictionary:
+            del new_dictionary[outline]
+
+    for outline in misstrokes_dictionary:
+        if outline in new_dictionary:
+            del new_dictionary[outline]
+
+    return new_dictionary
 
 
 def canonicalize_outline(dictionary):
@@ -321,10 +346,15 @@ def main():
     dictionary = filter_infolds(dictionary)
     save_dictionary('008.main', dictionary)
 
+    dictionary = filter_mistakes(dictionary)
+    save_dictionary('009.main', dictionary)
+
 #    dictionary = canonicalize_outline(dictionary)
 #    save_dictionary('009.main', dictionary)
 
     save_dictionary('final', dictionary)
+
+    shutil.copyfile('output/final.json', 'dictionaries/base.json')
 
 
 if __name__ == "__main__":
