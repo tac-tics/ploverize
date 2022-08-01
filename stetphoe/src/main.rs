@@ -1,6 +1,8 @@
-#![allow(clippy::collapsible_if)]
+#![allow(clippy::collapsible_if, clippy::new_without_default)]
 
 use std::collections::HashMap;
+use std::collections::VecDeque;
+use std::fmt::Display;
 use std::time::Duration;
 use serialport::SerialPort;
 
@@ -19,27 +21,129 @@ fn main() {
         .open()
         .expect("Failed to open port");
 
-//    let dictionary_json = std::fs::read_to_string("../dictionaries/base.json").unwrap();
-    let dictionary_json = include_str!("../../dictionaries/base.json");
-    let dictionary: HashMap<String, String> = serde_json::from_str(dictionary_json).unwrap();
+    let filename: &str = "../dictionaries/base.json";
+    let dictionary = JsonDictionary::load_from_file(filename).unwrap();
 
     loop {
         let stroke = read_stroke(port.as_mut());
-        let word = dictionary.get(&stroke.to_string());
+        let outline = stroke.clone().to_outline();
+        let word = dictionary.lookup(outline.clone());
         println!("{} {:?}", stroke, word);
     }
 }
 
 
+const MAX_UNDO: usize = 1 << 15;
+
+#[derive(Clone, Eq, PartialEq, PartialOrd, Ord, Hash, Debug)]
+pub struct Machine {
+    undo_buffer: VecDeque<Stroke>,
+    cap_next: bool,
+    space_next: bool,
+}
+
+impl Machine {
+    pub fn new() -> Self { 
+        Self { 
+            undo_buffer: VecDeque::new(), 
+            cap_next: true,
+            space_next: false, 
+        }
+    }
+
+    pub fn apply(&mut self, stroke: Stroke) -> Vec<Command> {
+        if self.undo_buffer.len() == MAX_UNDO {
+            self.undo_buffer.pop_back();
+        }
+        self.undo_buffer.push_back(stroke);
+        vec![]
+    }
+}
+
+#[derive(Clone, Eq, PartialEq, PartialOrd, Ord, Hash, Debug)]
+pub struct Outline(Vec<Stroke>);
+
+impl Outline {
+    pub fn strokes(&self) -> &[Stroke] {
+        let Outline(strokes) = self;
+        strokes
+    }
+}
+
+impl TryFrom<&str> for Outline {
+    type Error = ();
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        todo!()
+    }
+}
+
+impl std::ops::Div for Outline {
+    type Output = Outline;
+
+    fn div(self, rhs: Self) -> Self::Output {
+        let Outline(self_strokes) = self;
+        let Outline(rhs_strokes) = &rhs;
+        let result_strokes: Vec<Stroke> = self_strokes.iter().chain(rhs_strokes.iter()).cloned().collect();
+        Outline(result_strokes)
+    }
+}
+
+impl From<Stroke> for Outline {
+    fn from(stroke: Stroke) -> Self {
+        Outline(vec![stroke])
+    }
+}
+
+impl Display for Outline {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        for stroke in self.strokes() {
+            write!(f, "{stroke}")?;
+        }
+        Ok(())
+    }
+}
+
+pub trait Dictionary {
+    fn lookup(&self, outline: Outline) -> Option<&str>;
+}
+
+pub struct JsonDictionary(HashMap<String, String>);
+
+impl JsonDictionary {
+    pub fn load_from_file<P: AsRef<std::path::Path>>(filepath: P) -> Result<Self, Box<dyn std::error::Error>> {
+        let dictionary_json = std::fs::read_to_string(filepath)?;
+        let dictionary: HashMap<String, String> = serde_json::from_str(&dictionary_json)?;
+        Ok(JsonDictionary(dictionary))
+    }
+}
+
+impl Dictionary for JsonDictionary {
+    fn lookup(&self, outline: Outline) -> Option<&str> {
+        let JsonDictionary(dictionary) = self;
+        let entry = dictionary.get(&outline.to_string());
+        entry.map(|s| s.as_str())
+    }
+}
+
+pub enum Command {
+    Output(String),
+    Backspace(usize),
+}
+
 #[derive(Clone, Eq, PartialEq, PartialOrd, Ord, Hash, Debug)]
 pub struct Stroke(Vec<Key>);
 
 impl Stroke {
-    fn new(keys: &[Key]) -> Self {
+    pub fn new(keys: &[Key]) -> Self {
         let mut key_vec: Vec<Key> = keys.to_vec();
         key_vec.sort();
         key_vec.dedup();
         Stroke(key_vec)
+    }
+
+    pub fn to_outline(self) -> Outline {
+        Outline(vec![self])
     }
 }
 
