@@ -1,7 +1,7 @@
 #![allow(clippy::collapsible_if)]
 
+use std::collections::HashMap;
 use std::time::Duration;
-
 use serialport::SerialPort;
 
 
@@ -19,9 +19,14 @@ fn main() {
         .open()
         .expect("Failed to open port");
 
+//    let dictionary_json = std::fs::read_to_string("../dictionaries/base.json").unwrap();
+    let dictionary_json = include_str!("../../dictionaries/base.json");
+    let dictionary: HashMap<String, String> = serde_json::from_str(dictionary_json).unwrap();
+
     loop {
         let stroke = read_stroke(port.as_mut());
-        println!("{}", stroke);
+        let word = dictionary.get(&stroke.to_string());
+        println!("{} {:?}", stroke, word);
     }
 }
 
