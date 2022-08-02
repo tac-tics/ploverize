@@ -129,7 +129,6 @@ def filter_briefs(dictionary):
     for brief_word in briefs_dictionary.values():
         for outline, word in dictionary.items():
             if word == brief_word and outline in new_dictionary:
-                print(outline, word)
                 del new_dictionary[outline]
 
     return new_dictionary
