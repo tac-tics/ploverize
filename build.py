@@ -120,6 +120,21 @@ def filter_valid_outlines(dictionary):
     return valid_outlines_dict
 
 
+def filter_briefs(dictionary):
+    new_dictionary = copy(dictionary)
+
+    with open('dictionaries/briefs.json') as infile:
+        briefs_dictionary = json.load(infile)
+
+    for brief_word in briefs_dictionary.values():
+        for outline, word in dictionary.items():
+            if word == brief_word and outline in new_dictionary:
+                print(outline, word)
+                del new_dictionary[outline]
+
+    return new_dictionary
+
+
 def split_dictionary(dictionary, predicate):
     true_dict = {}
     false_dict = {}
@@ -320,37 +335,40 @@ def main():
     dictionary = filter_valid_outlines(dictionary)
     save_dictionary('001.main', dictionary)
 
-    affix_dictionary, dictionary = split_dictionary(dictionary, is_affix)
+    dictionary = filter_briefs(dictionary)
     save_dictionary('002.main', dictionary)
+
+    affix_dictionary, dictionary = split_dictionary(dictionary, is_affix)
+    save_dictionary('003.main', dictionary)
     save_dictionary('affix_dictionary', affix_dictionary)
 
     proper_dictionary, dictionary = split_dictionary(dictionary, is_proper_noun)
-    save_dictionary('003.main', dictionary)
+    save_dictionary('004.main', dictionary)
     save_dictionary('proper_dictionary', proper_dictionary)
 
     punctuation_dictionary, dictionary = split_dictionary(dictionary, has_punctuation)
-    save_dictionary('004.main', dictionary)
+    save_dictionary('005.main', dictionary)
     save_dictionary('punctuation_dictionary', punctuation_dictionary)
 
     multiword_dictionary, dictionary = split_dictionary(dictionary, is_multiword)
-    save_dictionary('005.main', dictionary)
+    save_dictionary('006.main', dictionary)
     save_dictionary('multiword_dictionary', multiword_dictionary)
 
     dictionary = filter_common_affixes(dictionary)
-    save_dictionary('006.main', dictionary)
+    save_dictionary('007.main', dictionary)
 
     dictionary, cant_pronounce_dictionary = split_dictionary(dictionary, can_pronounce)
-    save_dictionary('007.main', dictionary)
+    save_dictionary('008.main', dictionary)
     save_dictionary('cant_pronounce', cant_pronounce_dictionary)
 
     dictionary = filter_infolds(dictionary)
-    save_dictionary('008.main', dictionary)
-
-    dictionary = filter_mistakes(dictionary)
     save_dictionary('009.main', dictionary)
 
+    dictionary = filter_mistakes(dictionary)
+    save_dictionary('010.main', dictionary)
+
 #    dictionary = canonicalize_outline(dictionary)
-#    save_dictionary('009.main', dictionary)
+#    save_dictionary('011.main', dictionary)
 
     save_dictionary('final', dictionary)
 
