@@ -1,8 +1,10 @@
-#![allow(clippy::collapsible_if, clippy::new_without_default)]
+#![allow(clippy::collapsible_if, clippy::new_without_default, unused_parens, clippy::needless_return, clippy::len_without_is_empty)]
 
+use std::cell::RefCell;
 use std::collections::HashMap;
-use std::collections::VecDeque;
 use std::fmt::Display;
+use std::io::Write;
+use std::rc::Rc;
 use std::time::Duration;
 use serialport::SerialPort;
 
@@ -21,42 +23,135 @@ fn main() {
         .open()
         .expect("Failed to open port");
 
-    let filename: &str = "../dictionaries/base.json";
-    let dictionary = JsonDictionary::load_from_file(filename).unwrap();
+    let mut machine = Machine::new();
 
     loop {
         let stroke = read_stroke(port.as_mut());
-        let outline = stroke.clone().to_outline();
-        let word = dictionary.lookup(outline.clone());
-        println!("{} {:?}", stroke, word);
+        let Command(backspaces, emit_word) = machine.apply(stroke);
+        for _ in 0..backspaces {
+            print!("\x08");
+        }
+        print!("{emit_word}");
+        std::io::stdout().flush().unwrap();
     }
+}
+
+pub struct PrefixTree(RefCell<(Option<String>, HashMap<Stroke, Rc<PrefixTree>>)>);
+
+impl PrefixTree {
+    pub fn new(map: HashMap<Outline, String>) -> Self {
+        let tree = PrefixTree(RefCell::new((None, HashMap::new())));
+        for (outline, word) in map.into_iter() {
+            tree.add(outline.strokes(), word);
+        }
+        tree
+    }
+
+    fn add(&self, strokes: &[Stroke], word: String) {
+        let PrefixTree(refcell) = self;
+        if strokes.is_empty() {
+            let curr_word = &mut refcell.borrow_mut().0;
+            curr_word.replace(word);
+        } else {
+            let children = &mut refcell.borrow_mut().1;
+            let head = strokes[0].clone();
+            let tail = &strokes[1..];
+
+            if children.contains_key(&head) {
+                let child = children[&head].clone();
+                child.add(tail, word);
+            } else {
+                children.insert(head.clone(), Rc::new(PrefixTree(RefCell::new((None, HashMap::new())))));
+                children[&head].add(tail, word);
+            }
+        }
+    }
+
+    pub fn lookup(&self, outline: Outline) -> Option<String> {
+        self.lookup_by_strokes(outline.strokes())
+    }
+
+    fn lookup_by_strokes(&self, strokes: &[Stroke]) -> Option<String> {
+        let PrefixTree(refcell) = self;
+        if strokes.is_empty() {
+            let curr_word  = &refcell.borrow().0;
+            curr_word.clone()
+        } else {
+            let children = &refcell.borrow().1;
+            let head = strokes[0].clone();
+            let tail = &strokes[1..];
+            let child = children[&head].clone();
+            child.lookup_by_strokes(tail)
+        }
+
+    }
+}
+
+pub fn prefix_tree_from_json_dictionary(dictionary: JsonDictionary) -> PrefixTree {
+    let JsonDictionary(map) = dictionary;
+    let map: HashMap<Outline, String> = map.iter().map(|(k, v)| {
+        eprintln!("{k}");
+        (Outline::try_from_string(k).unwrap(), v.clone())
+    }).collect();
+    PrefixTree::new(map)
 }
 
 
 const MAX_UNDO: usize = 1 << 15;
 
-#[derive(Clone, Eq, PartialEq, PartialOrd, Ord, Hash, Debug)]
+
 pub struct Machine {
-    undo_buffer: VecDeque<Stroke>,
-    cap_next: bool,
-    space_next: bool,
+    undo: Vec<Outline>,
+    dictionary: Box<dyn Dictionary>,
 }
+
 
 impl Machine {
     pub fn new() -> Self { 
+        let filename: &str = "../output/main.json";
+        let dictionary = Box::new(JsonDictionary::load_from_file(filename).unwrap());
         Self { 
-            undo_buffer: VecDeque::new(), 
-            cap_next: true,
-            space_next: false, 
+            undo: Vec::new(), 
+            dictionary
         }
     }
 
-    pub fn apply(&mut self, stroke: Stroke) -> Vec<Command> {
-        if self.undo_buffer.len() == MAX_UNDO {
-            self.undo_buffer.pop_back();
+    fn current_outline(&self, stroke: Stroke) -> Outline {
+       if self.undo.is_empty() {
+            Outline::from(stroke)
+        } else {
+           let previous_outline = self.undo[self.undo.len() - 1].clone();
+           previous_outline / stroke
         }
-        self.undo_buffer.push_back(stroke);
-        vec![]
+    }
+
+    fn limit_undo(&mut self) {
+        if self.undo.len() > MAX_UNDO {
+            self.undo = self.undo[self.undo.len() / 2..].to_vec();
+        }
+    }
+
+    fn apply_lookup(&mut self) -> Command {
+//        let outline = self.current_outline();
+//        let Some(word) = self.dictionary.lookup(outline.clone()) {
+//        } else {
+//
+//        }
+          todo!()
+    }
+
+    fn apply_undo(&mut self) -> Command {
+        todo!()
+    }
+
+    pub fn apply(&mut self, stroke: Stroke) -> Command {
+        self.limit_undo();
+
+        if stroke == Stroke::new(&[Key::MiddleStar]) {
+            self.apply_undo()
+        } else {
+            self.apply_lookup()
+        }
     }
 }
 
@@ -64,19 +159,57 @@ impl Machine {
 pub struct Outline(Vec<Stroke>);
 
 impl Outline {
+    pub fn from(stroke: Stroke) -> Self {
+        Outline(vec![stroke])
+    }
+
     pub fn strokes(&self) -> &[Stroke] {
         let Outline(strokes) = self;
         strokes
     }
-}
 
-impl TryFrom<&str> for Outline {
-    type Error = ();
+    pub fn try_from(strokes: &[Stroke]) -> Option<Self> {
+        if strokes.is_empty() {
+            None
+        } else {
+            Some(Outline(strokes.to_owned()))
+        }
+    }
 
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
-        todo!()
+
+    pub fn len(&self) -> usize {
+        self.strokes().len()
+    }
+
+    pub fn try_from_string(s: &str) -> Option<Outline> {
+        let strokes: Vec<&str> = s.split('/').collect();
+        let first = strokes.get(0)?;
+        let mut outline = Outline::from(Stroke::try_from_string(first)?);
+
+        for stroke in &strokes[1..] {
+            outline = outline / Stroke::try_from_string(stroke)?;
+        }
+
+        Some(outline)
     }
 }
+
+fn char_to_key(ch: char, right_side: bool) -> Option<Key> {
+    let iter: Vec<_> = if right_side {
+        KEY_CHARS.iter().rev().collect()
+    } else {
+        KEY_CHARS.iter().collect()
+    };
+
+    for (target_key, letter) in  iter {
+        if ch == *letter {
+            return Some(*target_key);
+        }
+    }
+    None
+}
+
+const MIDDLE_CHARS: &[char] = &['A', 'O', '*', 'E', 'U'];
 
 impl std::ops::Div for Outline {
     type Output = Outline;
@@ -89,6 +222,17 @@ impl std::ops::Div for Outline {
     }
 }
 
+impl std::ops::Div<Stroke> for Outline {
+    type Output = Outline;
+
+    fn div(self, rhs: Stroke) -> Self::Output {
+        let Outline(self_strokes) = self;
+        let mut result_strokes: Vec<Stroke> = self_strokes.clone();
+        result_strokes.push(rhs);
+        Outline(result_strokes)
+    }
+}
+
 impl From<Stroke> for Outline {
     fn from(stroke: Stroke) -> Self {
         Outline(vec![stroke])
@@ -97,8 +241,13 @@ impl From<Stroke> for Outline {
 
 impl Display for Outline {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        for stroke in self.strokes() {
-            write!(f, "{stroke}")?;
+        let strokes = self.strokes();
+        for (i, stroke) in strokes.iter().enumerate() {
+            if i > 0 {
+                write!(f, "/{stroke}")?;
+            } else {
+                write!(f, "{stroke}")?;
+            }
         }
         Ok(())
     }
@@ -126,10 +275,8 @@ impl Dictionary for JsonDictionary {
     }
 }
 
-pub enum Command {
-    Output(String),
-    Backspace(usize),
-}
+#[derive(Clone, Eq, PartialEq, PartialOrd, Ord, Hash, Debug)]
+pub struct Command(pub usize, pub String);
 
 #[derive(Clone, Eq, PartialEq, PartialOrd, Ord, Hash, Debug)]
 pub struct Stroke(Vec<Key>);
@@ -145,7 +292,68 @@ impl Stroke {
     pub fn to_outline(self) -> Outline {
         Outline(vec![self])
     }
+
+    pub fn try_from_string(s: &str) -> Option<Self> {
+        let mut left_side = true;
+        let mut keys: Vec<Key> = vec![];
+
+        for ch in s.chars() {
+            if ch == '-' {
+                left_side = false;
+                continue;
+            }
+            if MIDDLE_CHARS.contains(&ch) {
+                left_side = false;
+            }
+            let key = char_to_key(ch, !left_side)?;
+            keys.push(key);
+
+        }
+        Some(Stroke::new(&keys))
+    }
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test() {
+        let keys = &[
+            Key::LeftS,
+            Key::LeftT,
+            Key::LeftK,
+            Key::MiddleA,
+            Key::RightS,
+        ];
+        assert_eq!(Stroke::try_from_string("STKAS"), Some(Stroke::new(keys)));
+
+        let keys = &[
+            Key::LeftS,
+            Key::LeftT,
+            Key::LeftK,
+            Key::RightS,
+        ];
+        assert_eq!(Stroke::try_from_string("STK-S"), Some(Stroke::new(keys)));
+    }
+
+
+    #[test]
+    fn test3() {
+        assert!(Outline::try_from_string("KAT").is_some());
+        assert!(Outline::try_from_string("BAT/TER").is_some());
+    }
+
+    #[test]
+    fn test2() {
+        let filename: &str = "../dictionaries/base.json";
+        let dictionary = JsonDictionary::load_from_file(filename).unwrap();
+        let prefix_tree = prefix_tree_from_json_dictionary(dictionary);
+//        let outline = Outline::try_from_string("KAT").unwrap();
+//        assert_eq!(prefix_tree.lookup(outline), Some("cat".to_owned()));
+    }
+}
+
 
 impl std::fmt::Display for Stroke {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -215,7 +423,7 @@ fn key_side(key: Key) -> KeySide {
 }
 
 fn key_letter(key: Key) -> char {
-    for (target_key, letter) in KEY_LETTER {
+    for (target_key, letter) in KEY_CHARS {
         if key == *target_key {
             return *letter;
         }
@@ -224,7 +432,7 @@ fn key_letter(key: Key) -> char {
 
 }
 
-const KEY_LETTER: &[(Key, char)] = &[
+const KEY_CHARS: &[(Key, char)] = &[
     (Key::LeftS, 'S'),
     (Key::LeftT, 'T'),
     (Key::LeftK, 'K'),
