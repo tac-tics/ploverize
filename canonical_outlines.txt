@@ -1,0 +1,75 @@
+Left Side
+
+ TPH
+SKWR
+
+The keys alone map to themselves. Eg, S->S, P->P, etc.
+
+TK -> D
+PW -> B
+TP -> F
+TKPW -> G
+HR -> L
+KW -> Qu
+SR -> V
+PH -> M
+TPH -> N
+KP -> X
+SKWR -> J
+KWR -> Y (or no sound)
+TH -> Th
+SH -> Sh
+KH -> Ch
+
+
+
+Things I'm excluding: 
+KR -> C (not so useful)
+STKPW -> Z
+
+
+Right  Side
+
+FPLTD
+RBGSZ
+
+-BG -> K
+-PL -> M
+- PB -> N
+-BGS -> Ks
+-PBLG -> J
+-PBG -> Ng 
+*T -> Th
+-FP -> Ch
+-RB -> Sh
+*PL -> Mp
+-FRB -> Rv
+-LG -> Lch
+*LG -> Lk
+*PBG -> Nk
+-GS -> Tion
+-FRPB -> Rch
+
+
+
+Things I'm excluding
+-F -> V (not canonical)
+-F -> Ss
+-PBG -> Nj
+-LG -> Lg
+
+
+
+Vowels
+
+
+AOE -> Ee
+AO -> Oo 
+EU -> I
+AE -> Ea 
+AU -> Aw 
+OU -> Ow 
+OEU-> Oy 
+OE -> Oe 
+AOEU-> Eye 
+
