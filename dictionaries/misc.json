@@ -1,6 +1,12 @@
 {
     "R-R": "{^}{#Return}{^}{-|}",
     "S-P": "{^ ^}",
-    "KW-PL": "{^}?",
-    "TP-BG": "{^}!"
+    "KW-PL": "{^}!",
+    "TP-BG": "{^}?",
+    "EUPL": "I'm",
+    "EUD": "I'd",
+    "EUF": "I've",
+    "AL/THO": "although",
+    "REPL": "remember",
+    "S-P": "{^ ^}"
 }
