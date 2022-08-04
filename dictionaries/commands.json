@@ -1,0 +1,17 @@
+{
+    "^R": "{#Tab}",
+    "^R*": "{#Shift(Tab)}",
+    "^-R": "{#Left}",
+    "^-R": "{#Left}",
+    "^-B": "{#Down}",
+    "^-P": "{#Up}",
+    "^-G": "{#Right}",
+    "^-F": "{#Home}",
+    "^-L": "{#End}",
+    "^-D": "{#Page_Up}",
+    "^-Z": "{#Page_Down}",
+    "^S": "{#Control(z)}",
+    "^K": "{#Control(x)}",
+    "^W": "{#Control(c)}",
+    "^R": "{#Control(v)}"
+}
