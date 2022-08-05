@@ -14,6 +14,10 @@
     "H-PL/-PL/-PL/-PL/-PL": "hmmmmm",
     "KWRES": "yes",
     "AUT": "ought",
+    "TKOPB": "don't",
+    "TKUPB": "done",
+    "SKP": "[USE AND]",
+    "-R": "[USE -R]",
     "": "allowed",
     "": "aloud",
     "": "statistics = STA/TIS-TIKS"

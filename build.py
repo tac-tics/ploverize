@@ -1,3 +1,4 @@
+import sys
 from collections import defaultdict
 import string
 import os.path
@@ -27,9 +28,7 @@ def save_dictionary(name, dictionary):
         json.dump(dictionary, outfile, indent=4, ensure_ascii=False)
 
 
-def load_dictionary(name):
-    filename = f'output/{name}.json'
-
+def load_dictionary_path(filename):
     with open(filename) as infile:
         return json.load(infile)
 
@@ -327,6 +326,21 @@ def canonicalize_outline(dictionary):
     return new_dictionary
 
 
+def combine_dictionaries(dictionaries):
+    new_dictionary = copy(dictionaries[0])
+    for dictionary in dictionaries[1:]:
+        for outline, word in dictionary.items():
+            if outline in new_dictionary and outline != "":
+                old_word = new_dictionary[outline]
+                if word == old_word:
+                    warning = ''
+                else:
+                    warning = '(was: ' + old_word + ')'
+                print('Duplicated entry:', outline, word, warning)
+            new_dictionary[outline] = word
+    return new_dictionary
+
+
 def main():
     dictionary = load_main_dictionary()
     save_dictionary('main', dictionary)
@@ -335,14 +349,14 @@ def main():
     dictionary = filter_valid_outlines(dictionary)
     save_dictionary(f'{stage:02}.main', dictionary)
 
-    stage += 1
-    dictionary = filter_briefs(dictionary)
-    save_dictionary(f'{stage:02}.main', dictionary)
+#    stage += 1
+#    dictionary = filter_briefs(dictionary)
+#    save_dictionary(f'{stage:02}.main', dictionary)
 
-    stage += 1
-    affix_dictionary, dictionary = split_dictionary(dictionary, is_affix)
-    save_dictionary(f'{stage:02}.main', dictionary)
-    save_dictionary(f'affix_dictionary', affix_dictionary)
+#    stage += 1
+#    affix_dictionary, dictionary = split_dictionary(dictionary, is_affix)
+#    save_dictionary(f'{stage:02}.main', dictionary)
+#    save_dictionary(f'affix_dictionary', affix_dictionary)
 
     stage += 1
     proper_dictionary, dictionary = split_dictionary(dictionary, is_proper_noun)
@@ -376,13 +390,27 @@ def main():
     dictionary = filter_mistakes(dictionary)
     save_dictionary(f'{stage:02}.main', dictionary)
 
+    stage += 1
+    dictionary_files = [
+        'dictionaries/affixes.json',
+        'dictionaries/briefs.json',
+        'dictionaries/commands.json',
+        'dictionaries/fingerspelling.json',
+        'dictionaries/numbers.json',
+        #'dictionaries/plover-use.json',
+        #'dictionaries/punctuation-di.json',
+        'dictionaries/punctuation.json',
+        'dictionaries/misc.json',
+    ]
+    dictionaries = [dictionary] + [load_dictionary_path(d) for d in dictionary_files]
+    dictionary = combine_dictionaries(dictionaries)
+    save_dictionary(f'{stage:02}.main', dictionary)
+
 #    stage += 1
 #    dictionary = canonicalize_outline(dictionary)
 #    save_dictionary(f'{stage:02}.main', dictionary)
 
     save_dictionary('final', dictionary)
-
-    shutil.copyfile('output/final.json', 'dictionaries/base.json')
 
 
 if __name__ == "__main__":
