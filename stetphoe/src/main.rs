@@ -1,5 +1,7 @@
 #![allow(clippy::collapsible_if, clippy::new_without_default, unused_parens, clippy::needless_return, clippy::len_without_is_empty)]
 
+pub mod keyboard;
+
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::Display;
@@ -10,6 +12,8 @@ use serialport::SerialPort;
 
 
 fn main() {
+    keyboard::do_thing();
+
     let ports = serialport::available_ports().expect("No ports found!");
     for p in &ports {
         println!("{}", p.port_name);
