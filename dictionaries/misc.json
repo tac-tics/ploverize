@@ -2,6 +2,8 @@
     "EUPL": "I'm",
     "EUD": "I'd",
     "EUF": "I've",
+    "EUL": "I'll",
+    "*EUL": "ill",
     "AL/THO": "although",
     "REPL": "remember",
     "KWRAE": "yeah",
@@ -11,5 +13,8 @@
     "H-PL/-PL/-PL/-PL": "hmmmm",
     "H-PL/-PL/-PL/-PL/-PL": "hmmmmm",
     "KWRES": "yes",
-    "AUT": "ought"
+    "AUT": "ought",
+    "": "allowed",
+    "": "aloud",
+    "": "statistics = STA/TIS-TIKS"
 }
