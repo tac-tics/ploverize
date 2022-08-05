@@ -15,5 +15,6 @@
     "#-T": "{^)}",
     "#*": "{#BackSpace}",
     "#-Z": "{^}{#Return}{^}{-|}",
-    "#H*": "{#Control(BackSpace)}"
+    "#H*": "{#Control(BackSpace)}",
+    "#": "{#Escape}"
 }

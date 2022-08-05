@@ -1,12 +1,15 @@
 {
-    "R-R": "{^}{#Return}{^}{-|}",
-    "S-P": "{^ ^}",
-    "KW-PL": "{^}!",
-    "TP-BG": "{^}?",
     "EUPL": "I'm",
     "EUD": "I'd",
     "EUF": "I've",
     "AL/THO": "although",
     "REPL": "remember",
-    "S-P": "{^ ^}"
+    "KWRAE": "yeah",
+    "H-PL": "hm",
+    "H-PL/-PL": "hmm",
+    "H-PL/-PL/-PL": "hmmm",
+    "H-PL/-PL/-PL/-PL": "hmmmm",
+    "H-PL/-PL/-PL/-PL/-PL": "hmmmmm",
+    "KWRES": "yes",
+    "AUT": "ought"
 }
