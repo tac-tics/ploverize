@@ -331,43 +331,54 @@ def main():
     dictionary = load_main_dictionary()
     save_dictionary('main', dictionary)
 
+    stage = 0
     dictionary = filter_valid_outlines(dictionary)
-    save_dictionary('001.main', dictionary)
+    save_dictionary(f'{stage:02}.main', dictionary)
 
+    stage += 1
     dictionary = filter_briefs(dictionary)
-    save_dictionary('002.main', dictionary)
+    save_dictionary(f'{stage:02}.main', dictionary)
 
+    stage += 1
     affix_dictionary, dictionary = split_dictionary(dictionary, is_affix)
-    save_dictionary('003.main', dictionary)
-    save_dictionary('affix_dictionary', affix_dictionary)
+    save_dictionary(f'{stage:02}.main', dictionary)
+    save_dictionary(f'affix_dictionary', affix_dictionary)
 
+    stage += 1
     proper_dictionary, dictionary = split_dictionary(dictionary, is_proper_noun)
-    save_dictionary('004.main', dictionary)
+    save_dictionary(f'{stage:02}.main', dictionary)
     save_dictionary('proper_dictionary', proper_dictionary)
 
+    stage += 1
     punctuation_dictionary, dictionary = split_dictionary(dictionary, has_punctuation)
-    save_dictionary('005.main', dictionary)
+    save_dictionary(f'{stage:02}.main', dictionary)
     save_dictionary('punctuation_dictionary', punctuation_dictionary)
 
+    stage += 1
     multiword_dictionary, dictionary = split_dictionary(dictionary, is_multiword)
-    save_dictionary('006.main', dictionary)
+    save_dictionary(f'{stage:02}.main', dictionary)
     save_dictionary('multiword_dictionary', multiword_dictionary)
 
+    stage += 1
     dictionary = filter_common_affixes(dictionary)
-    save_dictionary('007.main', dictionary)
+    save_dictionary(f'{stage:02}.main', dictionary)
 
+    stage += 1
     dictionary, cant_pronounce_dictionary = split_dictionary(dictionary, can_pronounce)
-    save_dictionary('008.main', dictionary)
+    save_dictionary(f'{stage:02}.main', dictionary)
     save_dictionary('cant_pronounce', cant_pronounce_dictionary)
 
+    stage += 1
     dictionary = filter_infolds(dictionary)
-    save_dictionary('009.main', dictionary)
+    save_dictionary(f'{stage:02}.main', dictionary)
 
+    stage += 1
     dictionary = filter_mistakes(dictionary)
-    save_dictionary('010.main', dictionary)
+    save_dictionary(f'{stage:02}.main', dictionary)
 
+#    stage += 1
 #    dictionary = canonicalize_outline(dictionary)
-#    save_dictionary('011.main', dictionary)
+#    save_dictionary(f'{stage:02}.main', dictionary)
 
     save_dictionary('final', dictionary)
 
