@@ -12,8 +12,6 @@ use serialport::SerialPort;
 
 
 fn main() {
-    keyboard::do_thing();
-
     let ports = serialport::available_ports().expect("No ports found!");
     for p in &ports {
         println!("{}", p.port_name);
@@ -32,9 +30,13 @@ fn main() {
     loop {
         let stroke = read_stroke(port.as_mut());
         let Command(backspaces, emit_word) = machine.apply(stroke);
+
+        keyboard::send_backspaces(backspaces as u8);
         for _ in 0..backspaces {
             print!("\x08");
         }
+
+        keyboard::send_keys(&emit_word);
         print!("{emit_word}");
         std::io::stdout().flush().unwrap();
     }
@@ -135,17 +137,18 @@ impl Machine {
         }
     }
 
-    fn apply_lookup(&mut self) -> Command {
+    fn apply_lookup(&mut self, stroke: Stroke) -> Command {
 //        let outline = self.current_outline();
-//        let Some(word) = self.dictionary.lookup(outline.clone()) {
-//        } else {
-//
-//        }
-          todo!()
+        let outline = Outline::from(stroke);
+        if let Some(word) = self.dictionary.lookup(outline) {
+            Command(0, word.to_owned())
+        } else {
+            Command(0, String::new())
+        }
     }
 
     fn apply_undo(&mut self) -> Command {
-        todo!()
+        Command(0, String::from("Hello"))
     }
 
     pub fn apply(&mut self, stroke: Stroke) -> Command {
@@ -154,7 +157,7 @@ impl Machine {
         if stroke == Stroke::new(&[Key::MiddleStar]) {
             self.apply_undo()
         } else {
-            self.apply_lookup()
+            self.apply_lookup(stroke)
         }
     }
 }
