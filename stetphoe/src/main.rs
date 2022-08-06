@@ -1,6 +1,7 @@
 #![allow(clippy::collapsible_if, clippy::new_without_default, unused_parens, clippy::needless_return, clippy::len_without_is_empty)]
 
 pub mod keyboard;
+pub mod japanese;
 
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -10,8 +11,13 @@ use std::rc::Rc;
 use std::time::Duration;
 use serialport::SerialPort;
 
+use japanese::KanaDictionary;
+
 
 fn main() {
+
+    keyboard::send_keys("あ");
+    return;
     let ports = serialport::available_ports().expect("No ports found!");
     for p in &ports {
         println!("{}", p.port_name);
@@ -115,7 +121,8 @@ pub struct Machine {
 impl Machine {
     pub fn new() -> Self { 
         let filename: &str = "../output/main.json";
-        let dictionary = Box::new(JsonDictionary::load_from_file(filename).unwrap());
+//        let dictionary = Box::new(JsonDictionary::load_from_file(filename).unwrap());
+        let dictionary = Box::new(KanaDictionary::new());
         Self { 
             undo: Vec::new(), 
             dictionary
@@ -317,6 +324,11 @@ impl Stroke {
 
         }
         Some(Stroke::new(&keys))
+    }
+
+    pub fn keys(&self) -> &[Key] {
+        let Stroke(keys) = self;
+        keys
     }
 }
 
