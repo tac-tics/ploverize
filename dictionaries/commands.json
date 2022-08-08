@@ -10,7 +10,8 @@
     "^-L": "{#End}",
     "^-D": "{#Page_Up}",
     "^-Z": "{#Page_Down}",
-    "^S": "{#Control(z)}",
+    "^S": "{#Tab}",
+    "^S*": "{#Shift(Tab)}",
     "^K": "{#Control(x)}",
     "^W": "{#Control(c)}",
     "^R": "{#Control(v)}"
