@@ -119,15 +119,15 @@ def filter_valid_outlines(dictionary):
     return valid_outlines_dict
 
 
-def filter_briefs(dictionary):
+def unique_briefs(dictionary):
     new_dictionary = copy(dictionary)
 
     with open('dictionaries/briefs.json') as infile:
         briefs_dictionary = json.load(infile)
 
-    for brief_word in briefs_dictionary.values():
+    for brief_outline, brief_word in briefs_dictionary.items():
         for outline, word in dictionary.items():
-            if word == brief_word and outline in new_dictionary:
+            if word == brief_word and outline in new_dictionary and outline != brief_outline:
                 del new_dictionary[outline]
 
     return new_dictionary
@@ -350,10 +350,6 @@ def main():
     save_dictionary(f'{stage:02}.main', dictionary)
 
 #    stage += 1
-#    dictionary = filter_briefs(dictionary)
-#    save_dictionary(f'{stage:02}.main', dictionary)
-
-#    stage += 1
 #    affix_dictionary, dictionary = split_dictionary(dictionary, is_affix)
 #    save_dictionary(f'{stage:02}.main', dictionary)
 #    save_dictionary(f'affix_dictionary', affix_dictionary)
@@ -404,6 +400,10 @@ def main():
     ]
     dictionaries = [dictionary] + [load_dictionary_path(d) for d in dictionary_files]
     dictionary = combine_dictionaries(dictionaries)
+    save_dictionary(f'{stage:02}.main', dictionary)
+
+    stage += 1
+    dictionary = unique_briefs(dictionary)
     save_dictionary(f'{stage:02}.main', dictionary)
 
 #    stage += 1
