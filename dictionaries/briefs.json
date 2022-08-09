@@ -38,7 +38,7 @@
     "O*ERBGS": "oh",
     "UR": "you're",
     "SRE": "very",
-    "TPHEU": "any", 
+    "TPHEU": "any",
     "TPHEUG": "anything",
     "HAP": "happen",
     "PHOF": "move",
@@ -89,5 +89,17 @@
     "W-PB": "within",
     "HA*E": "ah",
     "HUPBD": "hundred",
-    "WEUPL": "women" 
+    "WEUPL": "women",
+
+    "": "My changes start here",
+    "WHAOEU": "why",
+    "WH": "where",
+    "HEZ": "he's",
+    "KAPBT": "can't",
+    "KWRUR": "your",
+    "EUPL": "I'm",
+    "EUD": "I'd",
+    "EUF": "I've",
+    "EUL": "I'll",
+    "*EUL": "ill"
 }
