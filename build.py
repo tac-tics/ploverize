@@ -133,6 +133,34 @@ def unique_briefs(dictionary):
     return new_dictionary
 
 
+def unique_single_strokes(dictionary):
+    EXCEPTIONS = ['-S', '-Z', '-RS', '-RZ']
+    new_dictionary = copy(dictionary)
+
+    outlines_by_word = defaultdict(lambda: [])
+    for outline, word in dictionary.items():
+        if outline in EXCEPTIONS:
+            continue
+
+        strokes = outline.split('/')
+        if len(strokes) == 1:
+            outlines_by_word[word].append(outline)
+
+    for word in list(outlines_by_word.keys()):
+        outlines = outlines_by_word[word]
+        if len(outlines) > 1:
+            print(word, outlines)
+
+#    for brief_outline, brief_word in briefs_dictionary.items():
+#        for outline, word in dictionary.items():
+#            if word == brief_word and outline in new_dictionary and outline != brief_outline:
+#                del new_dictionary[outline]
+
+    return new_dictionary
+
+
+
+
 def split_dictionary(dictionary, predicate):
     true_dict = {}
     false_dict = {}
@@ -336,7 +364,7 @@ def combine_dictionaries(dictionaries):
                     warning = ''
                 else:
                     warning = '(was: ' + old_word + ')'
-                print('Duplicated entry:', outline, word, warning)
+                #print('Duplicated entry:', outline, word, warning)
             new_dictionary[outline] = word
     return new_dictionary
 
@@ -404,6 +432,10 @@ def main():
 
     stage += 1
     dictionary = unique_briefs(dictionary)
+    save_dictionary(f'{stage:02}.main', dictionary)
+
+    stage += 1
+    dictionary = unique_single_strokes(dictionary)
     save_dictionary(f'{stage:02}.main', dictionary)
 
 #    stage += 1
