@@ -177,8 +177,34 @@ def split_dictionary(dictionary, predicate):
 def is_affix(word):
     return word.startswith('{^') or word.endswith('^}') or word.startswith('{&') or word.endswith('&}')
 
+
 def has_punctuation(word):
     return any(ch in word for ch in '.,?/:;[]^&%$#@!()')
+
+def has_apostrophe(word):
+    ALLOWED = [
+        "s'more",
+        "c'mon",
+        "ne'er do well",
+        "y'all",
+        "young'un",
+        "o'clock",
+        "ma'am",
+        "movie 'til",
+        "{mid-'^}",
+        "mid-'60s",
+        "rock 'n' roll",
+        "'50s",
+        "'60s",
+        "'70s",
+        "'60",
+        "{^s'}",
+        "{O'^}",
+        "{o'^}",
+        "o'er",
+    ]
+
+    return "'" in word and word not in ALLOWED
 
 
 def is_multiword(word):
@@ -396,6 +422,11 @@ def main():
     multiword_dictionary, dictionary = split_dictionary(dictionary, is_multiword)
     save_dictionary(f'{stage:02}.main', dictionary)
     save_dictionary('multiword_dictionary', multiword_dictionary)
+
+    stage += 1
+    apostrophe_dictionary, dictionary = split_dictionary(dictionary, has_apostrophe)
+    save_dictionary(f'{stage:02}.main', dictionary)
+    save_dictionary('apostrophe', apostrophe_dictionary)
 
     stage += 1
     dictionary = filter_common_affixes(dictionary)
