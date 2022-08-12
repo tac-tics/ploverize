@@ -1,3 +1,4 @@
+from pathlib import Path
 import sys
 from collections import defaultdict
 import string
@@ -111,12 +112,15 @@ def is_valid_outline(outline):
     return all(is_valid_stroke(stroke) for stroke in strokes)
 
 
-def filter_valid_outlines(dictionary):
+def split_valid_outlines(dictionary):
     valid_outlines_dict = {}
+    invalid_outlines_dict = {}
     for outline, word in dictionary.items():
         if is_valid_outline(outline):
             valid_outlines_dict[outline] = word
-    return valid_outlines_dict
+        else:
+            invalid_outlines_dict[outline] = word
+    return valid_outlines_dict, invalid_outlines_dict
 
 
 def unique_briefs(dictionary):
@@ -149,7 +153,8 @@ def unique_single_strokes(dictionary):
     for word in list(outlines_by_word.keys()):
         outlines = outlines_by_word[word]
         if len(outlines) > 1:
-            print(word, outlines)
+            #print(word, outlines)
+            pass
 
 #    for brief_outline, brief_word in briefs_dictionary.items():
 #        for outline, word in dictionary.items():
@@ -157,8 +162,6 @@ def unique_single_strokes(dictionary):
 #                del new_dictionary[outline]
 
     return new_dictionary
-
-
 
 
 def split_dictionary(dictionary, predicate):
@@ -179,7 +182,7 @@ def is_affix(word):
 
 
 def has_punctuation(word):
-    return any(ch in word for ch in '.,?/:;[]^&%$#@!()')
+    return any(ch in word for ch in '.,?/:;[]^&%$#@!(){}')
 
 def has_apostrophe(word):
     ALLOWED = [
@@ -205,6 +208,10 @@ def has_apostrophe(word):
     ]
 
     return "'" in word and word not in ALLOWED
+
+def has_nonsense(word):
+    letters = [l for l in string.ascii_letters] + ['-', "'"]
+    return any(ch not in letters for ch in word)
 
 
 def is_multiword(word):
@@ -260,6 +267,7 @@ def filter_common_prefixes(dictionary):
 
 def filter_common_suffixes(dictionary):
     new_dictionary = copy(dictionary)
+    suffixes = {}
 
     suffixes = {
         '-G': 'ing',
@@ -311,16 +319,29 @@ def filter_common_suffixes(dictionary):
         if suffix and orthography.combine(base_word, suffix) == word:
             #print('deleting', outline, word, '=', base_word, "+", suffix)
             del new_dictionary[outline]
+            suffixes[outline] = word
 
-    return new_dictionary
+    for outline, word in dictionary.items():
+        if outline not in new_dictionary:
+            continue
+
+        for ending in ['ing', 'ly']:
+            if word.endswith(ending):
+                del new_dictionary[outline]
+                suffixes[outline] = word
+                break
+
+    return new_dictionary, suffixes
 
 
-def filter_common_affixes(dictionary):
-    return filter_common_suffixes(filter_common_prefixes(dictionary))
+def split_common_affixes(dictionary):
+    new_dictionary, suffixes = filter_common_suffixes(filter_common_prefixes(dictionary))
+    return new_dictionary, suffixes
 
 
-def filter_infolds(dictionary):
+def split_infolds(dictionary):
     new_dictionary = copy(dictionary)
+    infolds_dictionary = {}
 
     infolds = {
         'S': 's',
@@ -336,8 +357,9 @@ def filter_infolds(dictionary):
                 if orthography.combine(base_word, suffix) == word:
                     #print('deleting infold', outline, word)
                     del new_dictionary[outline]
+                    infolds_dictionary[outline] = word
 
-    return new_dictionary
+    return new_dictionary, infolds_dictionary
 
 
 def can_pronounce(word):
@@ -395,51 +417,69 @@ def combine_dictionaries(dictionaries):
     return new_dictionary
 
 
+def partition_main(main_dictionary):
+    print('* Partitioning Main Dictionary')
+    stage = 0
+
+    dictionary, invalid_outlines = split_valid_outlines(main_dictionary)
+    save_dictionary('main.invalid_outlines', invalid_outlines)
+    print('Created main.invalid_outlines')
+
+    proper_dictionary, dictionary = split_dictionary(dictionary, is_proper_noun)
+    save_dictionary('main.proper_dictionary', proper_dictionary)
+    print('Created main.proper_dictionary')
+
+    punctuation_dictionary, dictionary = split_dictionary(dictionary, has_punctuation)
+    save_dictionary('main.punctuation', punctuation_dictionary)
+    print('Created main.punctuation')
+
+    multiword_dictionary, dictionary = split_dictionary(dictionary, is_multiword)
+    save_dictionary('main.multiword', multiword_dictionary)
+    print('Created main.multiword')
+
+    dictionary, infolds_dictionary = split_infolds(dictionary)
+    save_dictionary('main.infolds', infolds_dictionary)
+    print('Created main.infolds')
+
+    apostrophe_dictionary, dictionary = split_dictionary(dictionary, has_apostrophe)
+    save_dictionary('main.apostrophe', apostrophe_dictionary)
+    print('Created main.apostrophe')
+
+    dictionary, affixes = split_common_affixes(dictionary)
+    save_dictionary(f'main.affixes', affixes)
+    print('Created main.affixes')
+
+    nonsense, dictionary = split_dictionary(dictionary, has_nonsense)
+    save_dictionary('main.nonsense', nonsense)
+    print('Created main.nonsense')
+
+    save_dictionary('main.remaining', dictionary)
+    print('Created main.remaining')
+
+    return dictionary
+
+
+def clean_output_dir():
+    print('* Cleaning output/ directory...')
+    output_dir = Path('output/').resolve()
+    shutil.rmtree(output_dir, ignore_errors=True)
+    output_dir.mkdir()
+
+
 def main():
-    dictionary = load_main_dictionary()
-    save_dictionary('main', dictionary)
+    clean_output_dir()
+
+    main_dictionary = load_main_dictionary()
+    save_dictionary('main', main_dictionary)
+
+    dictionary = partition_main(main_dictionary)
 
     stage = 0
-    dictionary = filter_valid_outlines(dictionary)
-    save_dictionary(f'{stage:02}.main', dictionary)
 
 #    stage += 1
-#    affix_dictionary, dictionary = split_dictionary(dictionary, is_affix)
+#    dictionary, cant_pronounce_dictionary = split_dictionary(dictionary, can_pronounce)
 #    save_dictionary(f'{stage:02}.main', dictionary)
-#    save_dictionary(f'affix_dictionary', affix_dictionary)
-
-    stage += 1
-    proper_dictionary, dictionary = split_dictionary(dictionary, is_proper_noun)
-    save_dictionary(f'{stage:02}.main', dictionary)
-    save_dictionary('proper_dictionary', proper_dictionary)
-
-    stage += 1
-    punctuation_dictionary, dictionary = split_dictionary(dictionary, has_punctuation)
-    save_dictionary(f'{stage:02}.main', dictionary)
-    save_dictionary('punctuation_dictionary', punctuation_dictionary)
-
-    stage += 1
-    multiword_dictionary, dictionary = split_dictionary(dictionary, is_multiword)
-    save_dictionary(f'{stage:02}.main', dictionary)
-    save_dictionary('multiword_dictionary', multiword_dictionary)
-
-    stage += 1
-    apostrophe_dictionary, dictionary = split_dictionary(dictionary, has_apostrophe)
-    save_dictionary(f'{stage:02}.main', dictionary)
-    save_dictionary('apostrophe', apostrophe_dictionary)
-
-    stage += 1
-    dictionary = filter_common_affixes(dictionary)
-    save_dictionary(f'{stage:02}.main', dictionary)
-
-    stage += 1
-    dictionary, cant_pronounce_dictionary = split_dictionary(dictionary, can_pronounce)
-    save_dictionary(f'{stage:02}.main', dictionary)
-    save_dictionary('cant_pronounce', cant_pronounce_dictionary)
-
-    stage += 1
-    dictionary = filter_infolds(dictionary)
-    save_dictionary(f'{stage:02}.main', dictionary)
+#    save_dictionary('cant_pronounce', cant_pronounce_dictionary)
 
     stage += 1
     dictionary = filter_mistakes(dictionary)
