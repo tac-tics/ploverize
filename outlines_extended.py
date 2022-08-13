@@ -113,6 +113,7 @@ def stroke_to_simple(stroke):
     left, middle, right = split_stroke(stroke)
     left = (
         left
+            .replace('Dis', 'STK')
             .replace('L', 'HR')
             .replace('Y', 'KWR')
             .replace('J', 'SKWR')
@@ -123,6 +124,7 @@ def stroke_to_simple(stroke):
             .replace('B', 'PW')
             .replace('D', 'TK')
             .replace('F', 'TP')
+            .replace('X', 'KP')
     )
 
     middle = (
@@ -147,6 +149,11 @@ def stroke_to_simple(stroke):
             .replace('V', 'F')
             .replace('Ck', 'BG')
             .replace('Ng', 'PBG')
+            .replace('Mp', 'FRP')
+            .replace('Rv', 'FRB')
+            .replace('Sh', 'RB')
+            .replace('Ch', 'FP')
+            .replace('Tion', 'GS')
     )
 
     if middle == '' and right != '':

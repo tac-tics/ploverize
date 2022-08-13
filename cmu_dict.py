@@ -198,17 +198,21 @@ CMUDICT = nltk.corpus.cmudict.dict()
 
 
 def main():
-    dictionary = load_main_dictionary()
-    for outline, word in dictionary.items():
-        if word not in CMUDICT:
-            continue
 
-        pronunciations = CMUDICT[word]
-        pronunciation = pronunciations[0]
+    for word in CMUDICT:
+        print(word)
 
-        if num_vowels(pronunciation) == 1:
-            pseudooutline = make_pseudooutline(outline)
-            print(pseudooutline, word, consonants_in(pronunciation))
+#    dictionary = load_main_dictionary()
+#    for outline, word in dictionary.items():
+#        if word not in CMUDICT:
+#            continue
+#
+#        pronunciations = CMUDICT[word]
+#        pronunciation = pronunciations[0]
+#
+#        if num_vowels(pronunciation) == 1:
+#            pseudooutline = make_pseudooutline(outline)
+#            print(pseudooutline, word, consonants_in(pronunciation))
 
 
 #    for word, pronunciations in CMUDICT.items():
