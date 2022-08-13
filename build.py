@@ -591,6 +591,19 @@ def clean_output_dir():
     output_dir.mkdir()
 
 
+def only_uniques(dictionary):
+    new_dictionary = {}
+    outlines_by_word = defaultdict(lambda: [])
+
+    for outline, word in dictionary.items():
+        outlines_by_word[word].append(outline)
+
+    for word, outlines in outlines_by_word.items():
+        if len(outlines) == 1:
+            outline = outlines[0]
+            new_dictionary[outline] = word
+
+    return new_dictionary
 
 
 def main():
@@ -599,7 +612,9 @@ def main():
     main_dictionary = load_main_dictionary()
     save_dictionary('main', main_dictionary)
 
-    dictionary = partition_main(main_dictionary)
+    main_dictionary = partition_main(main_dictionary)
+
+    dictionary = only_uniques(main_dictionary)
 
     stage = 0
     dictionary = filter_mistakes(dictionary)
