@@ -1,12 +1,16 @@
 {
-    "+-Z": "{^}{#Return}{^}{-|}",
+    "": "Cap or uncap next word",
+    "^H": "{-|}",
+    "^R": "{>}",
 
-    "+-D": "{#BackSpace}",
-    "+*D": "{*!}",
+    "": "Retro cap or uncap prev word",
+    "^H*": "{*-|}",
+    "^R*": "{*>}",
 
-    "+H": "{-|}",
-    "+R": "{>}",
+    "": "{$} terminates the word",
+    "^S": "{$}",
+    "": "{*?} retroactively terminates it",
+    "^S*": "{*?}",
 
-    "+H*": "{*-|}",
-    "+R*": "{*>}"
+    "": ""
 }

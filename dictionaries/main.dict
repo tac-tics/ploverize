@@ -1,4 +1,4 @@
-[
+{
     "T": "the",
     "Ay": "a",
 
@@ -144,7 +144,6 @@
     "DIL/DOh": "dildo",
     "WHIFRP/ER": "whimper",
     "LOL": "lol",
-    "A": "{a^}",
 
     "B-FR": "before",
     "AF": "after",
@@ -175,13 +174,17 @@
     "H": "{#}",
     "P": "{#}",
     "-P": "{#}",
+    "A": "{#}",
 
     "LIFT": "list",
     "LIFT/^": "lift",
 
-    "SKP": "[USE AND]",
+    "FOR/WARD": "forward",
+
+
     "": "allowed",
     "": "aloud",
-    "": "statistics = STA/TIS-TIKS"
-}
+    "": "statistics = STA/TIS-TIKS",
 
+    "": ""
+}

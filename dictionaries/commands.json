@@ -1,18 +1,29 @@
 {
-    "^R": "{#Tab}",
-    "^R*": "{#Shift(Tab)}",
-    "^-R": "{#Left}",
-    "^-R": "{#Left}",
-    "^-B": "{#Down}",
-    "^-P": "{#Up}",
-    "^-G": "{#Right}",
-    "^-F": "{#Home}",
-    "^-L": "{#End}",
-    "^-D": "{#Page_Up}",
-    "^-Z": "{#Page_Down}",
-    "^S": "{#Tab}",
-    "^S*": "{#Shift(Tab)}",
-    "^K": "{#Control(x)}",
-    "^W": "{#Control(c)}",
-    "^R": "{#Control(v)}"
+    "+-Z": "{^}{#Return}{^}{-|}",
+
+    "+-D": "{#BackSpace}",
+    "+*D": "{#Control(BackSpace)}",
+
+    "+R": "{#Tab}",
+    "+R*": "{#Shift(Tab)}",
+
+    "+-R": "{#Left}",
+    "+-B": "{#Down}",
+    "+-P": "{#Up}",
+    "+-G": "{#Right}",
+
+    "+-E": "{#Control(Left)}",
+    "+-U": "{#Control(Right)}",
+
+    "+-F": "{#Home}",
+    "+-L": "{#End}",
+
+    "+-T": "{#Page_Up}",
+    "+-S": "{#Page_Down}",
+
+    "+S": "{#Tab}",
+    "+S*": "{#Shift(Tab)}",
+    "+K": "{#Control(x)}",
+    "+W": "{#Control(c)}",
+    "+R": "{#Control(v)}"
 }
