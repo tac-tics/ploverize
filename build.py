@@ -622,11 +622,8 @@ def main():
         'dictionaries/commands.json',
         'dictionaries/fingerspelling.json',
         'dictionaries/numbers.json',
-        #'dictionaries/plover-use.json',
-        #'dictionaries/punctuation-di.json',
         'dictionaries/punctuation.json',
         'dictionaries/machine.json',
-        'dictionaries/misc.json',
     ]
     dictionaries = [dictionary] + [load_dictionary_path(d) for d in dictionary_files]
     dictionary = combine_dictionaries(dictionaries)
