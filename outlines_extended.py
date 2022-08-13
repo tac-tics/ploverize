@@ -26,7 +26,7 @@ def split_stroke(stroke):
     keys = stroke_to_keys(stroke)
     mode = 'left'
 
-    middles = ['A', 'O', 'I', 'Ee', 'E', 'U', '*', 'Aw', 'Ow', 'Eye', 'Oo', 'Ea', 'Oh']
+    middles = ['A', 'O', 'I', 'Ee', 'E', 'U', '*', 'Aw', 'Ow', 'Eye', 'Oo', 'Ea', 'Oh', 'Yoo', 'Oy', 'Ay']
     left = []
     middle = []
     right = []
@@ -111,6 +111,7 @@ def stroke_to_simple(stroke):
     left, middle, right = split_stroke(stroke)
     left = (
         left
+            .replace('L', 'HR')
             .replace('Y', 'KWR')
             .replace('J', 'SKWR')
             .replace('G', 'TKPW')
@@ -124,11 +125,16 @@ def stroke_to_simple(stroke):
 
     middle = (
         middle
-            .replace('Ee', 'AOE')
-            .replace('I', 'EU')
+            .replace('Oo', 'AO')
             .replace('Aw', 'AU')
-            .replace('Ow', 'OU')
+            .replace('Ea', 'AE')
             .replace('Oh', 'OE')
+            .replace('Ow', 'OU')
+            .replace('I', 'EU')
+            .replace('Yoo', 'AOU')
+            .replace('Ee', 'AOE')
+            .replace('Oy', 'OEU')
+            .replace('Ay', 'AEU')
             .replace('Eye', 'AOEU')
     )
 
