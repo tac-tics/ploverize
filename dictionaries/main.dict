@@ -32,7 +32,7 @@
     "WR": "were",
     "WR-NT": "weren't",
     "WAS": "was",
-    "WAS/NT": "wasn't",
+    "WAS/-NT": "wasn't",
 
     "UD": "you'd",
 
@@ -74,7 +74,7 @@
     "HEZ": "he's",
     "UR": "you're",
 
-    "SOM": "some"
+    "SOM": "some",
     "S-G": "something",
     "NI": "any",
     "NIG": "anything",
