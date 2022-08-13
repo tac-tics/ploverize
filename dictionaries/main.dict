@@ -1,11 +1,11 @@
-{
+[
     "T": "the",
     "Ay": "a",
 
     "WHO": "who",
     "WHA": "what",
     "WH": "which",
-    "WHR": "WHERE",
+    "WHR": "where",
     "WHEN": "when",
     "WHEye": "why",
 
@@ -27,12 +27,12 @@
     "-BG": "being",
     "AM": "am",
     "R": "are",
-    "R-NT": "aren't",
+    "R-N": "aren't",
     "S": "is",
     "WR": "were",
-    "WR-NT": "weren't",
+    "WR-N": "weren't",
     "WAS": "was",
-    "WAS/-NT": "wasn't",
+    "WAS/-N": "wasn't",
 
     "UD": "you'd",
 
@@ -48,11 +48,12 @@
     "THRU": "through",
 
     "DO": "do",
-    "DON": "done",
-    "DONT": "don't",
+    "DUN": "done",
+    "DON": "don't",
 
     "V": "have",
-    "V-NT": "haven't",
+    "V-N": "haven't",
+    "H": "had",
 
     "KAN": "can",
     "KANT": "can't",
@@ -60,13 +61,14 @@
     "O": "oh",
     "E": "eh",
 
-    "KWRE": "yes",
+    "YES": "yes",
     "NO": "no",
     "YEa": "yeah",
 
     "F": "if",
 
-    "T-S": "it's",
+    "-TS": "it's",
+    "*TS": "its",
     "IM": "I'm",
     "ID": "I'd",
     "IV": "I've",
@@ -82,6 +84,9 @@
     "NIN": "anyone",
     "NOG": "nothing",
 
+    "T-G": "thing",
+    "T-GS": "things",
+
     "VE": "very",
 
     "WUN": "one",
@@ -91,17 +96,19 @@
     "HAP": "happen",
     "MOF": "move",
     "RURN": "return",
+    "REM": "remember",
+    "RER": "[use REM]",
 
     "-VR": "ever",
 
+    "OhR": "other",
     "NOhR": "another",
-    "MAEB": "maybe",
-    "MEUN": "minute",
+
     "NUF": "enough",
+    "MAEB": "maybe",
     "TKPWENS": "against",
     "EFRG": "everything",
     "WONT": "wouldn't",
-    "RER": "remember",
     "EFRN": "everyone",
     "NAE": "anyway",
     "BLYoo": "blue",
@@ -132,7 +139,6 @@
     "GREeN": "green",
     "BAT": "bat",
     "AL/THO": "although",
-    "REM": "remember",
     "AwT": "ought",
     "REaL/TI": "reality",
     "DIL/DOh": "dildo",
@@ -147,8 +153,8 @@
     "OhLD": "old",
 
     "TOhD": "today",
-    "": "tomorrow",
-    "": "yesterday",
+    "TOhM": "tomorrow",
+    "YED": "yesterday",
 
     "AND": "and",
     "OR": "or",
@@ -157,11 +163,21 @@
     "KWE": "question",
     "ANS": "answer",
 
+    "MIN": "minute",
+    "HOwR": "hour",
+
     "H-M": "hm",
     "H-M/-M": "hmm",
     "H-M/-M/-M": "hmmm",
     "H-M/-M/-M/-M": "hmmmm",
     "H-M/-M/-M/-M/-M": "hmmmmm",
+
+    "H": "{#}",
+    "P": "{#}",
+    "-P": "{#}",
+
+    "LIFT": "list",
+    "LIFT/^": "lift",
 
     "SKP": "[USE AND]",
     "": "allowed",

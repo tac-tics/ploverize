@@ -162,7 +162,7 @@ def split_valid_outlines(dictionary):
 def unique_briefs(dictionary):
     new_dictionary = copy(dictionary)
 
-    with open('dictionaries/briefs.json') as infile:
+    with open('output/briefs.json') as infile:
         briefs_dictionary = json.load(infile)
 
     for brief_outline, brief_word in briefs_dictionary.items():
@@ -606,24 +606,45 @@ def main():
     save_dictionary(f'{stage:02}.main', dictionary)
 
     # make sure this just loads, okay?
-    d = to_simple(load_dictionary_path('dictionaries/main.dict'))
-    with open('dictionaries/briefs.json', 'w') as outfile:
+    personal_dictionary = load_dictionary_path('dictionaries/main.dict')
+    canonical_outlines = {}
+    for outline, word in personal_dictionary.items():
+        canonical_outlines[word] = outline
+
+    d = to_simple(personal_dictionary)
+    with open('output/briefs.json', 'w') as outfile:
         json.dump(d, outfile)
 
     stage += 1
     dictionary_files = [
+        'output/briefs.json',
         'dictionaries/affixes.json',
-        'dictionaries/briefs.json',
         'dictionaries/commands.json',
         'dictionaries/fingerspelling.json',
         'dictionaries/numbers.json',
         #'dictionaries/plover-use.json',
         #'dictionaries/punctuation-di.json',
         'dictionaries/punctuation.json',
+        'dictionaries/machine.json',
         'dictionaries/misc.json',
     ]
     dictionaries = [dictionary] + [load_dictionary_path(d) for d in dictionary_files]
     dictionary = combine_dictionaries(dictionaries)
+    save_dictionary(f'{stage:02}.main', dictionary)
+
+    stage += 1
+    new_dictionary = {}
+    for outline, word in dictionary.items():
+        if word == '{#}':
+            continue
+
+        if word in canonical_outlines:
+            canonical_outline = canonical_outlines[word]
+            if outline != outlines_extended.to_simple(canonical_outline):
+                word = f'[Use {canonical_outline} for {word!r}]'
+
+        new_dictionary[outline] = word
+    dictionary = new_dictionary
     save_dictionary(f'{stage:02}.main', dictionary)
 
     stage += 1

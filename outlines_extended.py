@@ -1,4 +1,4 @@
-LEFTS = "STKPWHR"
+LEFTS = "#^+STKPWHR"
 RIGHTS = "FRPBLGTSDZ"
 MIDDLES = "AO*EU"
 
@@ -60,6 +60,8 @@ assert split_stroke('GREeN') == ('GR', 'Ee', 'N')
 assert split_stroke('GR-N') == ('GR', '', 'N')
 assert split_stroke('-N') == ('', '', 'N')
 assert split_stroke('N') == ('N', '', '')
+assert split_stroke('+N') == ('+N', '', '')
+assert split_stroke('+-N') == ('+', '', 'N')
 
 
 def is_valid_side(side, reference):
@@ -75,9 +77,9 @@ def is_valid_side(side, reference):
 assert is_valid_side('SKR', LEFTS)
 assert is_valid_side('', LEFTS)
 assert is_valid_side(LEFTS, LEFTS)
+assert is_valid_side('#', LEFTS)
 assert not is_valid_side('SRK', LEFTS)
 assert not is_valid_side('SRA', LEFTS)
-assert not is_valid_side('#', LEFTS)
 assert not is_valid_side('s', LEFTS)
 assert not is_valid_side('0', LEFTS)
 assert is_valid_side('TKPW', LEFTS)
@@ -117,7 +119,7 @@ def stroke_to_simple(stroke):
             .replace('G', 'TKPW')
             .replace('N', 'TPH')
             .replace('M', 'PH')
-            .replace('V', 'HR')
+            .replace('V', 'SR')
             .replace('B', 'PW')
             .replace('D', 'TK')
             .replace('F', 'TP')
