@@ -178,11 +178,16 @@ def split_dictionary(dictionary, predicate):
 
 
 def is_affix(word):
-    return word.startswith('{^') or word.endswith('^}') or word.startswith('{&') or word.endswith('&}')
+    return word.startswith('{^') or word.endswith('^}')
+
+
+word_letters = [l for l in string.ascii_letters] + ["'", "-", " ", "."]
 
 
 def has_punctuation(word):
-    return any(ch in word for ch in '.,?/:;[]^&%$#@!(){}')
+    return not all(ch in word_letters for ch in word)
+#    return any(ch in word for ch in '.,?/:;[]^&%$#@!(){}<>')
+
 
 def has_apostrophe(word):
     ALLOWED = [
@@ -214,12 +219,15 @@ def has_nonsense(word):
     return any(ch not in letters for ch in word)
 
 
-def is_multiword(word):
-    return ' ' in word
-
-
 def is_proper_noun(word):
-    return word != word.lower() and word != 'I'
+    allowed = ["I", "I'll", "I'm", "I'd", "I've"]
+    has_uppercase_letter = any(ch in string.ascii_uppercase for ch in word)
+    contains_allowed_word = any(p == w for p in word.split(' ') for w in allowed)
+    return has_uppercase_letter and not contains_allowed_word
+
+
+def is_numeric(word):
+    return any(digit in word for digit in string.digits)
 
 
 def filter_common_prefixes(dictionary):
@@ -263,6 +271,61 @@ def filter_common_prefixes(dictionary):
             del new_dictionary[outline]
 
     return new_dictionary
+
+
+SUFFIXES = [
+    "'ll",
+    "'s",
+    "'ve",
+    "n't",
+
+    'ing',
+    'ed',
+    'er',
+    'ers',
+    'ly',
+    's',
+    'ier',
+
+#    "le",
+#    "or",
+#    'ability',
+#    'able',
+#    'al',
+#    'ary',
+#    'ation',
+#    'ble',
+#    'bly',
+#    'cal',
+#    'cy',
+#    'ial',
+#    'ian',
+#    'ibility',
+#    'ic',
+#    'ically',
+#    'in',
+#    'iness',
+#    'ion',
+#    'is',
+#    'ism',
+#    'ist',
+#    'ity',
+#    'ive',
+#    'l',
+#    'lar',
+#    'less',
+#    'ment',
+#    'ness',
+#    'ry',
+#    'ship',
+#    'tation',
+#    'tion',
+#    'tive',
+#    'tory',
+#    'ty',
+#    'uous',
+#    'y',
+]
 
 
 def filter_common_suffixes(dictionary):
@@ -419,44 +482,59 @@ def combine_dictionaries(dictionaries):
 
 def partition_main(main_dictionary):
     print('* Partitioning Main Dictionary')
-    stage = 0
 
-    dictionary, invalid_outlines = split_valid_outlines(main_dictionary)
-    save_dictionary('main.invalid_outlines', invalid_outlines)
-    print('Created main.invalid_outlines')
+    words = set(main_dictionary.values())
 
-    proper_dictionary, dictionary = split_dictionary(dictionary, is_proper_noun)
-    save_dictionary('main.proper_dictionary', proper_dictionary)
-    print('Created main.proper_dictionary')
+    letters = set(w for w in words if len(w) == 1 and w != 'a' and w != 'I')
+    words = words.difference(letters)
+    save_dictionary('main.letters', sorted(letters))
+    print('Created main.letters')
 
-    punctuation_dictionary, dictionary = split_dictionary(dictionary, has_punctuation)
-    save_dictionary('main.punctuation', punctuation_dictionary)
-    print('Created main.punctuation')
-
-    multiword_dictionary, dictionary = split_dictionary(dictionary, is_multiword)
-    save_dictionary('main.multiword', multiword_dictionary)
-    print('Created main.multiword')
-
-    dictionary, infolds_dictionary = split_infolds(dictionary)
-    save_dictionary('main.infolds', infolds_dictionary)
-    print('Created main.infolds')
-
-    apostrophe_dictionary, dictionary = split_dictionary(dictionary, has_apostrophe)
-    save_dictionary('main.apostrophe', apostrophe_dictionary)
-    print('Created main.apostrophe')
-
-    dictionary, affixes = split_common_affixes(dictionary)
-    save_dictionary(f'main.affixes', affixes)
+    affixes = set(w for w in words if is_affix(w))
+    words = words.difference(affixes)
+    save_dictionary('main.affixes', sorted(affixes))
     print('Created main.affixes')
 
-    nonsense, dictionary = split_dictionary(dictionary, has_nonsense)
-    save_dictionary('main.nonsense', nonsense)
-    print('Created main.nonsense')
+    punctuation = set(w for w in words if has_punctuation(w))
+    words = words.difference(punctuation)
+    save_dictionary('main.punctuation', sorted(punctuation))
+    print('Created main.punctuation')
 
-    save_dictionary('main.remaining', dictionary)
-    print('Created main.remaining')
+    # How many of these have a Wikipedia page?
+    proper_nouns = set(w for w in words if is_proper_noun(w))
+    words = words.difference(proper_nouns)
+    save_dictionary('main.proper', sorted(proper_nouns))
+    print('Created main.proper')
 
-    return dictionary
+    multiword = set(w for w in words if ' ' in w)
+    words = words.difference(multiword)
+    save_dictionary('main.multiword', sorted(multiword))
+    print('Created main.multiword')
+
+    numeric = set(w for w in words if is_numeric(w))
+    words = words.difference(numeric)
+    save_dictionary('main.numeric', sorted(numeric))
+    print('Created main.numeric')
+
+    cant_pronounce = set(w for w in words if not can_pronounce(w))
+    words = words.difference(cant_pronounce)
+    save_dictionary('main.cant_pronounce', sorted(cant_pronounce))
+    print('Created main.cant_pronounce')
+
+    inflections = set()
+
+    for word in sorted(words, key=lambda w: (len(w), w)):
+        for suffix in SUFFIXES:
+            inflected_word = orthography.combine(word, suffix)
+            if inflected_word in words:
+                inflections.add(inflected_word)
+
+    save_dictionary('main.inflections', sorted(inflections))
+    words = words.difference(inflections)
+    print('Created main.inflections')
+
+    save_dictionary('main.words', sorted(words))
+    print('Created main.words')
 
 
 def clean_output_dir():
@@ -473,6 +551,7 @@ def main():
     save_dictionary('main', main_dictionary)
 
     dictionary = partition_main(main_dictionary)
+    return
 
     stage = 0
 

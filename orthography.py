@@ -126,14 +126,13 @@ def combine(part1, part2):
     return f'{part1}{part2}'
 
 
-def main():
-    assert combine('artistic', 'ly') == 'artistically'
-    assert combine('questionable', 'ly') == 'questionably'
-    assert combine('artistic', 'ly') == 'artistically'
-    assert combine('similar', 'ish') == 'similarish'
-    assert combine('criminal', 'ology') == 'criminology'
-    assert combine('like', 'ly') == 'likely'
-
-
-if __name__ == "__main__":
-    main()
+assert combine('artistic', 'ly') == 'artistically'
+assert combine('questionable', 'ly') == 'questionably'
+assert combine('artistic', 'ly') == 'artistically'
+assert combine('similar', 'ish') == 'similarish'
+assert combine('criminal', 'ology') == 'criminology'
+assert combine('like', 'ly') == 'likely'
+assert combine('defer', 'ed') == 'deferred'
+assert combine('control', 'ed') == 'controlled'
+#assert combine('conciliator', 'y') == 'conciliatory'
+#assert combine('consider', 'ing') == 'considering'

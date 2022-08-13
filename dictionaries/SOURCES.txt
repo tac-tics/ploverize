@@ -1,1 +1,3 @@
 briefs.json https://gist.github.com/4hrue2kd83f/536bbea27b3e7869c25a25dbf2624a96
+https://raw.githubusercontent.com/didoesdigital/steno-dictionaries/master/dictionaries/dict.json
+https://simple.wikipedia.org/wiki/Wikipedia:Basic_English_alphabetical_wordlist
