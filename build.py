@@ -439,11 +439,15 @@ def filter_mistakes(dictionary):
 
     for outline in bad_habits_dictionary:
         if outline in new_dictionary:
+            word = new_dictionary[outline]
             del new_dictionary[outline]
+            #print(f"Removing bad habit {outline.ljust(15)} {word}")
 
     for outline in misstrokes_dictionary:
         if outline in new_dictionary:
+            word = new_dictionary[outline]
             del new_dictionary[outline]
+            #print(f"Removing misstroke {outline.ljust(15)} {word}")
 
     return new_dictionary
 
@@ -536,6 +540,13 @@ def partition_main(main_dictionary):
     save_dictionary('main.words', sorted(words))
     print('Created main.words')
 
+    new_dictionary = {}
+    for outline, word in main_dictionary.items():
+        if word in words:
+            new_dictionary[outline] = word
+
+    return new_dictionary
+
 
 def clean_output_dir():
     print('* Cleaning output/ directory...')
@@ -551,16 +562,8 @@ def main():
     save_dictionary('main', main_dictionary)
 
     dictionary = partition_main(main_dictionary)
-    return
 
     stage = 0
-
-#    stage += 1
-#    dictionary, cant_pronounce_dictionary = split_dictionary(dictionary, can_pronounce)
-#    save_dictionary(f'{stage:02}.main', dictionary)
-#    save_dictionary('cant_pronounce', cant_pronounce_dictionary)
-
-    stage += 1
     dictionary = filter_mistakes(dictionary)
     save_dictionary(f'{stage:02}.main', dictionary)
 
