@@ -607,6 +607,8 @@ def main():
 
     # make sure this just loads, okay?
     d = to_simple(load_dictionary_path('dictionaries/main.dict'))
+    with open('dictionaries/briefs.json', 'w') as outfile:
+        json.dump(d, outfile)
 
     stage += 1
     dictionary_files = [
