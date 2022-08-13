@@ -615,6 +615,23 @@ def main():
     with open('output/briefs.json', 'w') as outfile:
         json.dump(d, outfile)
 
+    p = load_dictionary_path('output/main.proper.json')
+    for outline, word in main_dictionary.items():
+        if word not in p:
+            continue
+
+        if word.startswith('to '):
+            # wtf are even these wtf
+            continue
+
+        strokes = outline.split('/')
+        if strokes[0] == '-T':
+            strokes[0] = 'TP'
+        else:
+            strokes = ['P'] + strokes
+        new_outline = '/'.join(strokes)
+        dictionary[new_outline] = word
+
     stage += 1
     dictionary_files = [
         'output/briefs.json',
@@ -624,6 +641,7 @@ def main():
         'dictionaries/numbers.json',
         'dictionaries/punctuation.json',
         'dictionaries/machine.json',
+        'dictionaries/misc.json',
     ]
     dictionaries = [dictionary] + [load_dictionary_path(d) for d in dictionary_files]
     dictionary = combine_dictionaries(dictionaries)
