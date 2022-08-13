@@ -9,6 +9,7 @@ import orthography
 from copy import copy
 import nltk
 import shutil
+import outlines_extended
 
 
 def load_net_dictionary(url):
@@ -34,12 +35,47 @@ def load_dictionary_path(filename):
         return json.load(infile)
 
 
+
+def simplify_stroke(stroke):
+    left, middle, right = split_stroke(stroke)
+    left = (
+        left
+            .replace('V', 'SR')
+            .replace('N', 'TPH')
+    )
+    middle = (
+        middle
+            .replace('Y', 'EU')
+    )
+    return join_stroke(left, middle, right)
+
+
+def simplify_outline(outline):
+    strokes = outline.split('/')
+    return '/'.join(simplify_stroke(s) for s in strokes)
+
+
+def to_simple(dictionary):
+    new_dictionary = {}
+    for outline, word in dictionary.items():
+        simple_outline = outlines_extended.to_simple(outline)
+        new_dictionary[simple_outline] = word
+    return new_dictionary
+
+
 CMUDICT = nltk.corpus.cmudict.dict()
 
 
 LEFTS = "STKPWHR"
 RIGHTS = "FRPBLGTSDZ"
 MIDDLES = "AO*EU"
+
+
+def join_stroke(left, middle, right):
+    if middle == '' and right != '':
+        middle = '-'
+
+    return left + middle + right
 
 
 def split_stroke(stroke):
@@ -479,7 +515,7 @@ def combine_dictionaries(dictionaries):
                     warning = ''
                 else:
                     warning = '(was: ' + old_word + ')'
-                #print('Duplicated entry:', outline, word, warning)
+                print('Duplicated entry:', outline, word, warning)
             new_dictionary[outline] = word
     return new_dictionary
 
@@ -555,6 +591,8 @@ def clean_output_dir():
     output_dir.mkdir()
 
 
+
+
 def main():
     clean_output_dir()
 
@@ -566,6 +604,9 @@ def main():
     stage = 0
     dictionary = filter_mistakes(dictionary)
     save_dictionary(f'{stage:02}.main', dictionary)
+
+    # make sure this just loads, okay?
+    d = to_simple(load_dictionary_path('dictionaries/main.dict'))
 
     stage += 1
     dictionary_files = [
