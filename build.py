@@ -606,15 +606,25 @@ def only_uniques(dictionary):
     return new_dictionary
 
 
+def add_henkan_bypass(dictionary, main_dictionary):
+    new_dictionary = copy(dictionary)
+
+    for outline, word in main_dictionary.items():
+        #new_outline = outline + '/#'
+        new_outline = outline
+        new_dictionary[new_outline] = word
+
+    return new_dictionary
+
+
 def main():
     clean_output_dir()
 
     main_dictionary = load_main_dictionary()
     save_dictionary('main', main_dictionary)
 
-    main_dictionary = partition_main(main_dictionary)
-
-    dictionary = only_uniques(main_dictionary)
+    dictionary = only_uniques(partition_main(main_dictionary))
+    dictionary = add_henkan_bypass(dictionary, main_dictionary)
 
     stage = 0
     dictionary = filter_mistakes(dictionary)
@@ -641,9 +651,9 @@ def main():
 
         strokes = outline.split('/')
         if strokes[0] == '-T':
-            strokes[0] = 'TP'
+            strokes[0] = 'T-P'
         else:
-            strokes = ['P'] + strokes
+            strokes = ['-P'] + strokes
         new_outline = '/'.join(strokes)
         dictionary[new_outline] = word
 

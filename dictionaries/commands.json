@@ -12,8 +12,8 @@
     "+-P": "{#Up}",
     "+-G": "{#Right}",
 
-    "+-E": "{#Control(Left)}",
-    "+-U": "{#Control(Right)}",
+    "+A": "{#Control(Left)}",
+    "+O": "{#Control(Right)}",
 
     "+-F": "{#Home}",
     "+-L": "{#End}",

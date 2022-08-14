@@ -1,10 +1,9 @@
 {
-    "": "P is a prefix for proper nouns... TP for proper nouns starting with 'the'",
-    "P": "...",
-    "TP": "the...",
+    "": "-P is a prefix for proper nouns... T-P for proper nouns starting with 'the'",
+    "-P": "[proper...]",
+    "T-P": "the [proper...]",
 
-    "H": "{#}",
-    "-P": "{#}",
+    "P": "{#}",
     "A": "{#}",
 
     "": ""
