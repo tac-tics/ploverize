@@ -316,12 +316,12 @@ SUFFIXES = [
     "n't",
 
     'ing',
-    'ed',
-    'er',
-    'ers',
-    'ly',
-    's',
-    'ier',
+#    'ed',
+#    'er',
+#    'ers',
+#    'ly',
+#    's',
+#    'ier',
 
 #    "le",
 #    "or",
@@ -609,7 +609,11 @@ def only_uniques(dictionary):
 def add_henkan_bypass(dictionary, main_dictionary):
     new_dictionary = copy(dictionary)
 
+    w = load_dictionary_path('output/main.words.json')
     for outline, word in main_dictionary.items():
+        if word not in w:
+            continue
+
         #new_outline = outline + '/#'
         new_outline = outline
         new_dictionary[new_outline] = word
