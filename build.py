@@ -23,6 +23,11 @@ def load_main_dictionary():
     return load_net_dictionary(url)
 
 
+def load_lapwing_dictionary():
+    url = 'https://raw.githubusercontent.com/aerickt/steno-dictionaries/6a0e3c844aec96a3d11350ef7a189f1ef03b243f/lapwing-base.json'
+    return load_net_dictionary(url)
+
+
 def save_dictionary(name, dictionary):
     filename = f'output/{name}.json'
 
