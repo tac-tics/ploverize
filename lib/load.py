@@ -19,7 +19,7 @@ def load_lapwing_dictionary():
 
 
 def save_dictionary(name, dictionary):
-    filename = f'{name}.json'
+    filename = f'{name}'
 
     with open(filename, 'w') as outfile:
         json.dump(dictionary, outfile, indent=4, ensure_ascii=False)

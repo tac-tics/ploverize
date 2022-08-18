@@ -252,14 +252,76 @@ def add_henkan_bypass(dictionary, main_dictionary):
 with open('output/main.words.json') as infile:
     MAIN_WORDS = json.load(infile)
 
+
+def add_fingerspelling(dictionary):
+    new_dictionary = copy(dictionary)
+    FINGER_SPELLING = {
+        'a': 'A',
+        'b': 'PW',
+        'c': 'KR',
+        'd': 'TK',
+        #'e': 'E',
+        'e': 'RO',
+        'f': 'TP',
+        'g': 'TKPW',
+        'h': 'H',
+        # 'i': 'EU',
+        'i': 'RAO',
+        'j': 'SKWR',
+        'k': 'K',
+        'l': 'HR',
+        'm': 'PH',
+        'n': 'TPH',
+        'o': 'O',
+        'p': 'P',
+        'q': 'KW',
+        'r': 'R',
+        's': 'S',
+        't': 'T',
+        #'u': 'U',
+        'u': 'RA',
+        'v': 'SR',
+        'w': 'W',
+        'x': 'KP',
+        'y': 'KWR',
+        'z': 'STKPW',
+
+        '0': '-Z',
+        '1': '-F',
+        '2': '-P',
+        '3': '-L',
+        '4': '-T',
+        '5': '-D',
+        '6': '-R',
+        '7': '-B',
+        '8': '-G',
+        '9': '-S',
+        ',': 'E',
+        '.': 'U',
+    }
+
+    for ch, outline in FINGER_SPELLING.items():
+        lowerword = '{>}{&' + ch + '}'
+        new_dictionary[outline] = lowerword
+
+        if ch in string.ascii_lowercase:
+            upperword = '{&' + ch.upper() + '}'
+            new_dictionary[outline + '*'] = upperword
+
+    new_dictionary['AOEU'] = '{^ ^}'
+    new_dictionary['*'] = '=undo'
+
+    return new_dictionary
+
+
 def main():
     #clean_output_dir()
 
     main_dictionary = load_main_dictionary()
-    save_dictionary('output/main', main_dictionary)
+    save_dictionary('output/main.json', main_dictionary)
 
     lapwing_dictionary = load_lapwing_dictionary()
-    save_dictionary('output/lapwing', lapwing_dictionary)
+    save_dictionary('output/lapwing.json', lapwing_dictionary)
 
     #dictionary = only_uniques(partition_main(main_dictionary))
     #dictionary = add_henkan_bypass(dictionary, main_dictionary)
@@ -271,7 +333,7 @@ def main():
 
     stage = 0
     dictionary = filter_mistakes(dictionary)
-    save_dictionary(f'output/{stage:02}.main', dictionary)
+    save_dictionary(f'output/{stage:02}.main.json', dictionary)
 
     # make sure this just loads, okay?
     personal_dictionary = load_dictionary_path('dictionaries/main.dict')
@@ -305,15 +367,13 @@ def main():
         'output/briefs.json',
         'dictionaries/affixes.json',
         'dictionaries/commands.json',
-        'dictionaries/fingerspelling.json',
-        'dictionaries/numbers.json',
         'dictionaries/punctuation.json',
         'dictionaries/machine.json',
         'dictionaries/misc.json',
     ]
     dictionaries = [dictionary] + [load_dictionary_path(d) for d in dictionary_files]
     dictionary = combine_dictionaries(dictionaries)
-    save_dictionary(f'output/{stage:02}.main', dictionary)
+    save_dictionary(f'output/{stage:02}.main.json', dictionary)
 
     stage += 1
     new_dictionary = {}
@@ -328,21 +388,40 @@ def main():
 
         new_dictionary[outline] = word
     dictionary = new_dictionary
-    save_dictionary(f'output/{stage:02}.main', dictionary)
+    save_dictionary(f'output/{stage:02}.main.json', dictionary)
 
     stage += 1
     dictionary = unique_briefs(dictionary)
-    save_dictionary(f'output/{stage:02}.main', dictionary)
+    save_dictionary(f'output/{stage:02}.main.json', dictionary)
 
     stage += 1
     dictionary = unique_single_strokes(dictionary)
-    save_dictionary(f'output/{stage:02}.main', dictionary)
+    save_dictionary(f'output/{stage:02}.main.json', dictionary)
 
 #    stage += 1
 #    dictionary = canonicalize_outline(dictionary)
-#    save_dictionary(f'output/{stage:02}.main', dictionary)
+#    save_dictionary(f'output/{stage:02}.main.json', dictionary)
 
-    save_dictionary('output/final', dictionary)
+#    stage += 1
+#    dictionary = add_fingerspelling(dictionary)
+#    save_dictionary(f'output/{stage:02}.main.json', dictionary)
+
+    save_dictionary('output/final.json', dictionary)
+
+    fingerspelling_dictionary = {
+        "exclude_entry": False,
+        "exit_on_mismatch": False,
+        "exit_on_match": False,
+        "ignore_folding": True,
+        'entry': {
+            '#*': '{#}',
+        },
+        'exit': {
+            '#*': '{#}',
+        },
+        'dict': add_fingerspelling({}),
+    }
+    save_dictionary(f'output/fingerspelling.modal', fingerspelling_dictionary)
 
 
 if __name__ == "__main__":
