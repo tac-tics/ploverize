@@ -25,5 +25,8 @@
     "+S*": "{#Shift(Tab)}",
     "+K": "{#Control(x)}",
     "+W": "{#Control(c)}",
-    "+R": "{#Control(v)}"
+    "+R": "{#Control(v)}",
+
+    "": "Useful for breaking out of a particular mode.",
+    "+": "{#}"
 }

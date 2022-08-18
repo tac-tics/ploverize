@@ -253,8 +253,55 @@ with open('output/main.words.json') as infile:
     MAIN_WORDS = json.load(infile)
 
 
-def add_fingerspelling(dictionary):
-    new_dictionary = copy(dictionary)
+def make_mobility_dictionary():
+    d = {
+        "-Z": "{^}{#Return}{^}{-|}",
+
+        "-D": "{#BackSpace}",
+        "AD": "{#Control(BackSpace)}",
+        "S-D": "{#Shift(BackSpace)}",
+
+        "R": "{#Tab}",
+        "AR": "{#Control(Tab)}",
+        "S-R": "{#Shift(Tab)}",
+
+        "-R": "{#Left}",
+        "-B": "{#Down}",
+        "-P": "{#Up}",
+        "-G": "{#Right}",
+
+        "AR": "{#Control(Left)}",
+        "AB": "{#Control(Down)}",
+        "AP": "{#Control(Up)}",
+        "AG": "{#Control(Right)}",
+
+        "S-R": "{#Shift(Left)}",
+        "S-B": "{#Shift(Down)}",
+        "S-P": "{#Shift(Up)}",
+        "S-G": "{#Shift(Right)}",
+
+        "SAR": "{#Shift(Control(Left))}",
+        "SAB": "{#Shift(Control(Down))}",
+        "SAP": "{#Shift(Control(Up))}",
+        "SAG": "{#Shift(Control(Right))}",
+    }
+
+    return {
+        "exclude_entry": False,
+        "exit_on_mismatch": False,
+        "exit_on_match": False,
+        "ignore_folding": True,
+        'entry': {
+            '+PH': '{#}',
+        },
+        'exit': {
+            '+': '{#}',
+        },
+        'dict': d,
+    }
+
+
+def make_fingerspelling_dictionary():
     FINGER_SPELLING = {
         'a': 'A',
         'b': 'PW',
@@ -300,6 +347,7 @@ def add_fingerspelling(dictionary):
         '.': 'U',
     }
 
+    new_dictionary = {}
     for ch, outline in FINGER_SPELLING.items():
         lowerword = '{>}{&' + ch + '}'
         new_dictionary[outline] = lowerword
@@ -311,7 +359,19 @@ def add_fingerspelling(dictionary):
     new_dictionary['AOEU'] = '{^ ^}'
     new_dictionary['*'] = '=undo'
 
-    return new_dictionary
+    return {
+        "exclude_entry": False,
+        "exit_on_mismatch": False,
+        "exit_on_match": False,
+        "ignore_folding": True,
+        "entry": {
+            "+TP": "{#}"
+        },
+        "exit": {
+            "+": "{#}"
+        },
+        'dict': new_dictionary,
+    }
 
 
 def main():
@@ -408,20 +468,8 @@ def main():
 
     save_dictionary('output/final.json', dictionary)
 
-    fingerspelling_dictionary = {
-        "exclude_entry": False,
-        "exit_on_mismatch": False,
-        "exit_on_match": False,
-        "ignore_folding": True,
-        'entry': {
-            '#*': '{#}',
-        },
-        'exit': {
-            '#*': '{#}',
-        },
-        'dict': add_fingerspelling({}),
-    }
-    save_dictionary(f'output/fingerspelling.modal', fingerspelling_dictionary)
+    save_dictionary(f'output/fingerspelling.modal', make_fingerspelling_dictionary())
+    save_dictionary(f'output/mobility.modal', make_mobility_dictionary())
 
 
 if __name__ == "__main__":
