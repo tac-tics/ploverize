@@ -1,64 +1,24 @@
-from pathlib import Path
-import sys
-from collections import defaultdict
-import string
-import os.path
-import httpx
-import json
-import orthography
 from copy import copy
-import nltk
+from pathlib import Path
+from collections import defaultdict
+import sys
+import json
+import string
 import shutil
-import outlines_extended
+import os.path
 
+import nltk
 
-def load_net_dictionary(url):
-    response = httpx.get(url)
-    response.raise_for_status()
-    return response.json()
-
-
-def load_main_dictionary():
-    url = 'https://raw.githubusercontent.com/openstenoproject/plover/1e4d8b3bff0b705d936f14d31d5997456c5823cf/plover/assets/main.json'
-    return load_net_dictionary(url)
-
-
-def load_lapwing_dictionary():
-    url = 'https://raw.githubusercontent.com/aerickt/steno-dictionaries/6a0e3c844aec96a3d11350ef7a189f1ef03b243f/lapwing-base.json'
-    return load_net_dictionary(url)
-
-
-def save_dictionary(name, dictionary):
-    filename = f'output/{name}.json'
-
-    with open(filename, 'w') as outfile:
-        json.dump(dictionary, outfile, indent=4, ensure_ascii=False)
-
-
-def load_dictionary_path(filename):
-    with open(filename) as infile:
-        return json.load(infile)
-
-
-
-def simplify_stroke(stroke):
-    left, middle, right = split_stroke(stroke)
-    left = (
-        left
-            .replace('V', 'SR')
-            .replace('N', 'TPH')
-    )
-    middle = (
-        middle
-            .replace('Y', 'EU')
-    )
-    return join_stroke(left, middle, right)
-
-
-def simplify_outline(outline):
-    strokes = outline.split('/')
-    return '/'.join(simplify_stroke(s) for s in strokes)
-
+import lib.orthography as orthography
+import lib.outlines_extended as outlines_extended
+import lib.outline
+from lib.load import (
+    load_net_dictionary,
+    load_main_dictionary,
+    load_lapwing_dictionary,
+    save_dictionary,
+    load_dictionary_path,
+)
 
 def to_simple(dictionary):
     new_dictionary = {}
@@ -69,99 +29,6 @@ def to_simple(dictionary):
 
 
 CMUDICT = nltk.corpus.cmudict.dict()
-
-
-LEFTS = "STKPWHR"
-RIGHTS = "FRPBLGTSDZ"
-MIDDLES = "AO*EU"
-
-
-def join_stroke(left, middle, right):
-    if middle == '' and right != '':
-        middle = '-'
-
-    return left + middle + right
-
-
-def split_stroke(stroke):
-    mode = 'left'
-
-    left = []
-    middle = []
-    right = []
-
-    for ch in stroke:
-        if mode == 'left':
-            if ch == '-':
-                mode = 'right'
-            elif ch in MIDDLES:
-                mode = 'middle'
-            else:
-                left.append(ch)
-
-        if mode == 'middle':
-            if ch not in MIDDLES:
-                mode = 'right'
-            else:
-                middle.append(ch)
-
-        if mode == 'right':
-            right.append(ch)
-
-    if len(middle) == 0 and len(right) > 0:
-        # trim leading '-'
-        right = right[1:]
-
-    return ''.join(left), ''.join(middle), ''.join(right)
-
-
-def is_valid_side(side, reference):
-    filtered_reference = ''
-    for ch in reference:
-        if ch in side:
-            filtered_reference += ch
-
-    return side == filtered_reference
-
-
-
-assert is_valid_side('SKR', LEFTS)
-assert is_valid_side('', LEFTS)
-assert is_valid_side(LEFTS, LEFTS)
-assert not is_valid_side('SRK', LEFTS)
-assert not is_valid_side('SRA', LEFTS)
-assert not is_valid_side('#', LEFTS)
-assert not is_valid_side('s', LEFTS)
-assert not is_valid_side('0', LEFTS)
-
-
-def is_valid_stroke(stroke):
-    left, middle, right = split_stroke(stroke)
-    return (
-        is_valid_side(left, LEFTS) and
-        is_valid_side(middle, MIDDLES) and
-        is_valid_side(right, RIGHTS)
-    )
-
-
-assert is_valid_stroke('SRA')
-assert is_valid_stroke('-Z')
-
-
-def is_valid_outline(outline):
-    strokes = outline.split('/')
-    return all(is_valid_stroke(stroke) for stroke in strokes)
-
-
-def split_valid_outlines(dictionary):
-    valid_outlines_dict = {}
-    invalid_outlines_dict = {}
-    for outline, word in dictionary.items():
-        if is_valid_outline(outline):
-            valid_outlines_dict[outline] = word
-        else:
-            invalid_outlines_dict[outline] = word
-    return valid_outlines_dict, invalid_outlines_dict
 
 
 def unique_briefs(dictionary):
@@ -218,18 +85,6 @@ def split_dictionary(dictionary, predicate):
     return true_dict, false_dict
 
 
-def is_affix(word):
-    return word.startswith('{^') or word.endswith('^}')
-
-
-word_letters = [l for l in string.ascii_letters] + ["'", "-", " ", "."]
-
-
-def has_punctuation(word):
-    return not all(ch in word_letters for ch in word)
-#    return any(ch in word for ch in '.,?/:;[]^&%$#@!(){}<>')
-
-
 def has_apostrophe(word):
     ALLOWED = [
         "s'more",
@@ -258,17 +113,6 @@ def has_apostrophe(word):
 def has_nonsense(word):
     letters = [l for l in string.ascii_letters] + ['-', "'"]
     return any(ch not in letters for ch in word)
-
-
-def is_proper_noun(word):
-    allowed = ["I", "I'll", "I'm", "I'd", "I've"]
-    has_uppercase_letter = any(ch in string.ascii_uppercase for ch in word)
-    contains_allowed_word = any(p == w for p in word.split(' ') for w in allowed)
-    return has_uppercase_letter and not contains_allowed_word
-
-
-def is_numeric(word):
-    return any(digit in word for digit in string.digits)
 
 
 def filter_common_prefixes(dictionary):
@@ -312,162 +156,6 @@ def filter_common_prefixes(dictionary):
             del new_dictionary[outline]
 
     return new_dictionary
-
-
-SUFFIXES = [
-    "'ll",
-    "'s",
-    "'ve",
-    "n't",
-
-    'ing',
-#    'ed',
-#    'er',
-#    'ers',
-#    'ly',
-#    's',
-#    'ier',
-
-#    "le",
-#    "or",
-#    'ability',
-#    'able',
-#    'al',
-#    'ary',
-#    'ation',
-#    'ble',
-#    'bly',
-#    'cal',
-#    'cy',
-#    'ial',
-#    'ian',
-#    'ibility',
-#    'ic',
-#    'ically',
-#    'in',
-#    'iness',
-#    'ion',
-#    'is',
-#    'ism',
-#    'ist',
-#    'ity',
-#    'ive',
-#    'l',
-#    'lar',
-#    'less',
-#    'ment',
-#    'ness',
-#    'ry',
-#    'ship',
-#    'tation',
-#    'tion',
-#    'tive',
-#    'tory',
-#    'ty',
-#    'uous',
-#    'y',
-]
-
-
-def filter_common_suffixes(dictionary):
-    new_dictionary = copy(dictionary)
-    suffixes = {}
-
-    suffixes = {
-        '-G': 'ing',
-        '-D': 'ed',
-        '-S': 's',
-        '-Z': 's',
-        'EU': 'y',
-        'HR': 'l',
-        'ER': 'er',
-        'EUBG': 'ic',
-        'HREU': 'ly',
-        'ER': 'er',
-        'TEU': 'ty',
-        '*ER': 'er',
-#        'KWRA': 'a',
-        'KWREU': 'y',
-        '-BL': 'ble',
-        'REU': 'ly',
-        'ERS': 'ers',
-        '*PBS': 'iness',
-        'SEU': 'cy',
-        'EUS': 'is',
-        'A*L': 'al',
-        'KHREU': 'ically',
-        'T*EUF': 'tive',
-        'EUF': 'ive',
-        'K-L': 'cal',
-        'KWRAL': 'ial',
-        '*EUPB': 'in',
-        '*L': "le",
-        'PWHREU': 'bly',
-        'HRAR': 'lar',
-        '-LS': 'less',
-        'TAEUGS': 'tation',
-        'O*R': "or",
-#        '-L': "'ll",
-    }
-
-    for outline, word in dictionary.items():
-        last_stroke = outline.split('/')[-1]
-        base_outline = '/'.join(outline.split('/')[:-1])
-
-        if base_outline not in dictionary:
-            continue
-
-        base_word = dictionary[base_outline]
-        suffix = suffixes.get(last_stroke)
-
-        if suffix and orthography.combine(base_word, suffix) == word:
-            #print('deleting', outline, word, '=', base_word, "+", suffix)
-            del new_dictionary[outline]
-            suffixes[outline] = word
-
-    for outline, word in dictionary.items():
-        if outline not in new_dictionary:
-            continue
-
-        for ending in ['ing', 'ly']:
-            if word.endswith(ending):
-                del new_dictionary[outline]
-                suffixes[outline] = word
-                break
-
-    return new_dictionary, suffixes
-
-
-def split_common_affixes(dictionary):
-    new_dictionary, suffixes = filter_common_suffixes(filter_common_prefixes(dictionary))
-    return new_dictionary, suffixes
-
-
-def split_infolds(dictionary):
-    new_dictionary = copy(dictionary)
-    infolds_dictionary = {}
-
-    infolds = {
-        'S': 's',
-        'Z': 's',
-        'G': 'ing',
-        'D': 'ed',
-    }
-    for outline, word in dictionary.items():
-        for infold, suffix in infolds.items():
-            if outline.endswith(infold):
-                base_outline = outline[:-len(infold)]
-                base_word = dictionary.get(base_outline, '')
-                if orthography.combine(base_word, suffix) == word:
-                    #print('deleting infold', outline, word)
-                    del new_dictionary[outline]
-                    infolds_dictionary[outline] = word
-
-    return new_dictionary, infolds_dictionary
-
-
-def can_pronounce(word):
-    return word in CMUDICT
 
 
 STENO_DICTIONARIES_URL = 'https://raw.githubusercontent.com/didoesdigital/steno-dictionaries/62e3c35ef4ee5508dd625acac3b036e4a4c20ed7'
@@ -525,70 +213,6 @@ def combine_dictionaries(dictionaries):
     return new_dictionary
 
 
-def partition_main(main_dictionary):
-    print('* Partitioning Main Dictionary')
-
-    words = set(main_dictionary.values())
-
-    letters = set(w for w in words if len(w) == 1 and w != 'a' and w != 'I')
-    words = words.difference(letters)
-    save_dictionary('main.letters', sorted(letters))
-    print('Created main.letters')
-
-    affixes = set(w for w in words if is_affix(w))
-    words = words.difference(affixes)
-    save_dictionary('main.affixes', sorted(affixes))
-    print('Created main.affixes')
-
-    punctuation = set(w for w in words if has_punctuation(w))
-    words = words.difference(punctuation)
-    save_dictionary('main.punctuation', sorted(punctuation))
-    print('Created main.punctuation')
-
-    # How many of these have a Wikipedia page?
-    proper_nouns = set(w for w in words if is_proper_noun(w))
-    words = words.difference(proper_nouns)
-    save_dictionary('main.proper', sorted(proper_nouns))
-    print('Created main.proper')
-
-    multiword = set(w for w in words if ' ' in w)
-    words = words.difference(multiword)
-    save_dictionary('main.multiword', sorted(multiword))
-    print('Created main.multiword')
-
-    numeric = set(w for w in words if is_numeric(w))
-    words = words.difference(numeric)
-    save_dictionary('main.numeric', sorted(numeric))
-    print('Created main.numeric')
-
-    cant_pronounce = set(w for w in words if not can_pronounce(w))
-    words = words.difference(cant_pronounce)
-    save_dictionary('main.cant_pronounce', sorted(cant_pronounce))
-    print('Created main.cant_pronounce')
-
-    inflections = set()
-
-    for word in sorted(words, key=lambda w: (len(w), w)):
-        for suffix in SUFFIXES:
-            inflected_word = orthography.combine(word, suffix)
-            if inflected_word in words:
-                inflections.add(inflected_word)
-
-    save_dictionary('main.inflections', sorted(inflections))
-    words = words.difference(inflections)
-    print('Created main.inflections')
-
-    save_dictionary('main.words', sorted(words))
-    print('Created main.words')
-
-    new_dictionary = {}
-    for outline, word in main_dictionary.items():
-        if word in words:
-            new_dictionary[outline] = word
-
-    return new_dictionary
-
-
 def clean_output_dir():
     print('* Cleaning output/ directory...')
     output_dir = Path('output/').resolve()
@@ -625,19 +249,29 @@ def add_henkan_bypass(dictionary, main_dictionary):
 
     return new_dictionary
 
+with open('output/main.words.json') as infile:
+    MAIN_WORDS = json.load(infile)
 
 def main():
-    clean_output_dir()
+    #clean_output_dir()
 
     main_dictionary = load_main_dictionary()
-    save_dictionary('main', main_dictionary)
+    save_dictionary('output/main', main_dictionary)
 
-    dictionary = only_uniques(partition_main(main_dictionary))
-    dictionary = add_henkan_bypass(dictionary, main_dictionary)
+    lapwing_dictionary = load_lapwing_dictionary()
+    save_dictionary('output/lapwing', lapwing_dictionary)
+
+    #dictionary = only_uniques(partition_main(main_dictionary))
+    #dictionary = add_henkan_bypass(dictionary, main_dictionary)
+    dictionary = {}
+
+#    for outline, word in lapwing_dictionary.items():
+#        if word in MAIN_WORDS:
+#            dictionary[outline] = word
 
     stage = 0
     dictionary = filter_mistakes(dictionary)
-    save_dictionary(f'{stage:02}.main', dictionary)
+    save_dictionary(f'output/{stage:02}.main', dictionary)
 
     # make sure this just loads, okay?
     personal_dictionary = load_dictionary_path('dictionaries/main.dict')
@@ -679,7 +313,7 @@ def main():
     ]
     dictionaries = [dictionary] + [load_dictionary_path(d) for d in dictionary_files]
     dictionary = combine_dictionaries(dictionaries)
-    save_dictionary(f'{stage:02}.main', dictionary)
+    save_dictionary(f'output/{stage:02}.main', dictionary)
 
     stage += 1
     new_dictionary = {}
@@ -694,21 +328,21 @@ def main():
 
         new_dictionary[outline] = word
     dictionary = new_dictionary
-    save_dictionary(f'{stage:02}.main', dictionary)
+    save_dictionary(f'output/{stage:02}.main', dictionary)
 
     stage += 1
     dictionary = unique_briefs(dictionary)
-    save_dictionary(f'{stage:02}.main', dictionary)
+    save_dictionary(f'output/{stage:02}.main', dictionary)
 
     stage += 1
     dictionary = unique_single_strokes(dictionary)
-    save_dictionary(f'{stage:02}.main', dictionary)
+    save_dictionary(f'output/{stage:02}.main', dictionary)
 
 #    stage += 1
 #    dictionary = canonicalize_outline(dictionary)
-#    save_dictionary(f'{stage:02}.main', dictionary)
+#    save_dictionary(f'output/{stage:02}.main', dictionary)
 
-    save_dictionary('final', dictionary)
+    save_dictionary('output/final', dictionary)
 
 
 if __name__ == "__main__":
