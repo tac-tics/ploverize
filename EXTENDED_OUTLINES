@@ -1,17 +1,17 @@
 LEFTS
 
     Dis  STK
-    L    HR
-    Y    KWR
-    J    SKWR
-    G    TKPW
-    N    TPH
     M    PH
     V    SR
     B    PW
     D    TK
     F    TP
     X    KP
+    L    HR
+    Y    KWR
+    N    TPH
+    J    SKWR
+    G    TKPW
 
 MIDDLES
 
@@ -27,16 +27,17 @@ MIDDLES
 
 RIGHTS
 
+    V    F
     N    PB
     M    PL
-    V    F
     Ck   BG
-    Ng   PBG
-    Mp   FRP
-    Rv   FRB
     Sh   RB
     Ch   FP
     Tion GS
+    Ng   PBG
+    Mp   FRP
+    Rv   FRB
+    Rch  FRPB
 
 
 
