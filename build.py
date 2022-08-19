@@ -331,7 +331,7 @@ def make_fingerspelling_dictionary():
         'w': 'W',
         'x': 'KP',
         'y': 'KWR',
-        'z': 'STKPW',
+        'z': 'TW',
 
         '0': '-Z',
         '1': '-F',
@@ -356,7 +356,8 @@ def make_fingerspelling_dictionary():
             upperword = '{&' + ch.upper() + '}'
             new_dictionary[outline + '*'] = upperword
 
-    new_dictionary['AOEU'] = '{^ ^}'
+    new_dictionary['SP'] = '{^ ^}'
+    new_dictionary['-PS'] = '{^ ^}'
     new_dictionary['*'] = '=undo'
 
     return {
@@ -383,13 +384,13 @@ def main():
     lapwing_dictionary = load_lapwing_dictionary()
     save_dictionary('output/lapwing.json', lapwing_dictionary)
 
-    #dictionary = only_uniques(partition_main(main_dictionary))
-    #dictionary = add_henkan_bypass(dictionary, main_dictionary)
     dictionary = {}
+    #dictionary = only_uniques(partition_main(main_dictionary))
+    dictionary = add_henkan_bypass(dictionary, main_dictionary)
 
-#    for outline, word in lapwing_dictionary.items():
-#        if word in MAIN_WORDS:
-#            dictionary[outline] = word
+    for outline, word in lapwing_dictionary.items():
+        if word in MAIN_WORDS:
+            dictionary[outline] = word
 
     stage = 0
     dictionary = filter_mistakes(dictionary)

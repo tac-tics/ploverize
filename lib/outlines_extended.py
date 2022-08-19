@@ -145,11 +145,11 @@ def stroke_to_simple(stroke):
     right = (
         right
             .replace('N', 'PB')
-            .replace('M', 'PL')
             .replace('V', 'F')
             .replace('Ck', 'BG')
             .replace('Ng', 'PBG')
             .replace('Mp', 'FRP')
+            .replace('M', 'PL')
             .replace('Rv', 'FRB')
             .replace('Sh', 'RB')
             .replace('Ch', 'FP')
