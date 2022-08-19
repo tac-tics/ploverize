@@ -125,6 +125,7 @@ def stroke_to_simple(stroke):
             .replace('D', 'TK')
             .replace('F', 'TP')
             .replace('X', 'KP')
+            .replace('C', 'KR')
     )
 
     middle = (
