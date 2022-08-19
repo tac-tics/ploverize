@@ -153,6 +153,7 @@ def stroke_to_simple(stroke):
             .replace('Rv', 'FRB')
             .replace('Sh', 'RB')
             .replace('Ch', 'FP')
+            .replace('J', 'PBLG')
             .replace('Tion', 'GS')
     )
 
