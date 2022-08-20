@@ -175,67 +175,67 @@
     {
         "word": "whose",
         "outline": "WHOS",
-        "mistakes": "WHOZ"
+        "mistakes": ["WHOZ"]
     },
     {
         "word": "other",
-        "outline": ""
+        "outline": "OThr"
     },
     {
         "word": "others",
-        "outline": ""
+        "outline": "OThrS"
     },
     {
         "word": "another",
-        "outline": ""
+        "outline": "NOThr"
     },
     {
         "word": "each",
-        "outline": ""
+        "outline": "EeCh"
     },
     {
         "word": "enough",
-        "outline": ""
+        "outline": "NUF"
     },
     {
         "word": "either",
-        "outline": ""
+        "outline": "EeRT"
     },
     {
         "word": "neither",
-        "outline": ""
+        "outline": "NEeRT"
     },
     {
         "word": "any",
-        "outline": ""
+        "outline": "NI"
     },
     {
         "word": "anybody",
-        "outline": ""
+        "outline": "N-B"
     },
     {
         "word": "anyone",
-        "outline": ""
+        "outline": "N-N"
     },
     {
         "word": "anything",
-        "outline": ""
+        "outline": "N-G"
     },
     {
         "word": "every",
-        "outline": ""
+        "outline": "EVR"
     },
     {
         "word": "everyone",
-        "outline": ""
+        "outline": "EVRN"
     },
     {
         "word": "everybody",
-        "outline": ""
+        "outline": "EVRB"
     },
     {
         "word": "everything",
-        "outline": ""
+        "outline": "EVRG"
     },
     {
         "word": "some",
@@ -248,15 +248,15 @@
     },
     {
         "word": "somebody",
-        "outline": "SM-B"
+        "outline": "S-B"
     },
     {
         "word": "something",
-        "outline": "SM-G"
+        "outline": "S-G"
     },
     {
         "word": "somewhere",
-        "outline": ""
+        "outline": "SWHR"
     },
     {
         "word": "no",
@@ -304,31 +304,31 @@
     },
     {
         "word": "several",
-        "outline": ""
+        "outline": "SEVRL"
     },
     {
         "word": "more",
-        "outline": ""
+        "outline": "MOR"
     },
     {
         "word": "most",
-        "outline": ""
+        "outline": "MOSt"
     },
     {
         "word": "much",
-        "outline": ""
+        "outline": "MUCh"
     },
     {
         "word": "such",
-        "outline": ""
+        "outline": "SUCh"
     },
     {
         "word": "a",
-        "outline": ""
+        "outline": "A"
     },
     {
         "word": "an",
-        "outline": ""
+        "outline": "AN"
     },
     {
         "word": "the",
@@ -340,7 +340,7 @@
     },
     {
         "word": "where",
-        "outline": ""
+        "outline": "WHR"
     },
     {
         "word": "why",
@@ -380,12 +380,14 @@
     },
     {
         "word": "although",
-        "outline": ""
+        "outline": "AL/THO",
+        "note": "This one is a bit hard to refine.",
+        "related": ["though"]
     },
     {
         "word": "because",
         "outline": "KUZ",
-        "mistake": "KAUS"
+        "mistakes": ["KAUS"]
     },
     {
         "word": "since",
@@ -393,6 +395,6 @@
     },
     {
         "word": "unless",
-        "outline": ""
+        "outline": "UNLess"
     }
 ]
