@@ -9,6 +9,7 @@ import os.path
 
 import nltk
 
+import dict_from_base
 import lib.orthography as orthography
 import lib.outlines_extended as outlines_extended
 import lib.outline
@@ -384,13 +385,15 @@ def main():
     lapwing_dictionary = load_lapwing_dictionary()
     save_dictionary('output/lapwing.json', lapwing_dictionary)
 
-    dictionary = {}
+    #dictionary = {}
     #dictionary = only_uniques(partition_main(main_dictionary))
-    dictionary = add_henkan_bypass(dictionary, main_dictionary)
+    #dictionary = add_henkan_bypass(dictionary, main_dictionary)
 
-    for outline, word in lapwing_dictionary.items():
-        if word in MAIN_WORDS:
-            dictionary[outline] = word
+#    for outline, word in lapwing_dictionary.items():
+#        if word in MAIN_WORDS:
+#            dictionary[outline] = word
+
+    dictionary = dict_from_base.build_dict()
 
     stage = 0
     dictionary = filter_mistakes(dictionary)

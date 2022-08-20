@@ -37,7 +37,7 @@
     },
     {
         "word": "yours",
-        "outline": "",
+        "outline": "URS",
         "mistakes": ["URZ"],
         "notes": "Could be produced with -s suffix"
     },
@@ -300,7 +300,7 @@
     },
     {
         "word": "many",
-        "outline": ""
+        "outline": "M-N"
     },
     {
         "word": "several",

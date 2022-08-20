@@ -29,7 +29,7 @@ def get_entries_by_word():
     return entries_by_word
 
 
-def main():
+def build_dict():
     entries_by_word = get_entries_by_word()
 
     dictionary = {}
@@ -37,7 +37,20 @@ def main():
     for word, entry in entries_by_word.items():
         word = entry['word']
         ext_outline = entry['outline']
-        print(word.ljust(20), resolve_outline(ext_outline, entries_by_word))
+        outline = resolve_outline(ext_outline, entries_by_word)
+        assert outline not in dictionary, f'Outline already exists: {outline}'
+        dictionary[outline] = word
+
+    return dictionary
+
+
+def main():
+    entries_by_word = get_entries_by_word()
+
+    dictionary = build_dict()
+
+    for outline, word in dictionary.items():
+        print(word.ljust(20), outline)
 
 
 if __name__ == '__main__':
