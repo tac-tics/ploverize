@@ -396,71 +396,71 @@ def main():
     dictionary = dict_from_base.build_dict()
 
     stage = 0
-    dictionary = filter_mistakes(dictionary)
-    save_dictionary(f'output/{stage:02}.main.json', dictionary)
+#    dictionary = filter_mistakes(dictionary)
+#    save_dictionary(f'output/{stage:02}.main.json', dictionary)
 
     # make sure this just loads, okay?
-    personal_dictionary = load_dictionary_path('dictionaries/main.dict')
-    canonical_outlines = {}
-    for outline, word in personal_dictionary.items():
-        canonical_outlines[word] = outline
+#    personal_dictionary = load_dictionary_path('dictionaries/main.dict')
+#    canonical_outlines = {}
+#    for outline, word in personal_dictionary.items():
+#        canonical_outlines[word] = outline
+#
+#    d = to_simple(personal_dictionary)
+#    with open('output/briefs.json', 'w') as outfile:
+#        json.dump(d, outfile)
 
-    d = to_simple(personal_dictionary)
-    with open('output/briefs.json', 'w') as outfile:
-        json.dump(d, outfile)
-
-    p = load_dictionary_path('output/main.proper.json')
-    for outline, word in main_dictionary.items():
-        if word not in p:
-            continue
-
-        if word.startswith('to '):
-            # wtf are even these wtf
-            continue
-
-        strokes = outline.split('/')
-        if strokes[0] == '-T':
-            strokes[0] = 'T-P'
-        else:
-            strokes = ['-P'] + strokes
-        new_outline = '/'.join(strokes)
-        dictionary[new_outline] = word
+#    p = load_dictionary_path('output/main.proper.json')
+#    for outline, word in main_dictionary.items():
+#        if word not in p:
+#            continue
+#
+#        if word.startswith('to '):
+#            # wtf are even these wtf
+#            continue
+#
+#        strokes = outline.split('/')
+#        if strokes[0] == '-T':
+#            strokes[0] = 'T-P'
+#        else:
+#            strokes = ['-P'] + strokes
+#        new_outline = '/'.join(strokes)
+#        dictionary[new_outline] = word
 
     stage += 1
     dictionary_files = [
-        'output/briefs.json',
+#        'output/briefs.json',
         'dictionaries/affixes.json',
         'dictionaries/commands.json',
         'dictionaries/punctuation.json',
         'dictionaries/machine.json',
-        'dictionaries/misc.json',
+#        'dictionaries/misc.json',
     ]
     dictionaries = [dictionary] + [load_dictionary_path(d) for d in dictionary_files]
     dictionary = combine_dictionaries(dictionaries)
     save_dictionary(f'output/{stage:02}.main.json', dictionary)
 
-    stage += 1
-    new_dictionary = {}
-    for outline, word in dictionary.items():
-        if word == '{#}':
-            continue
+#    stage += 1
+#    new_dictionary = {}
+#    for outline, word in dictionary.items():
+#        if word == '{#}':
+#            continue
+#
+#        if word in canonical_outlines:
+#            canonical_outline = canonical_outlines[word]
+#            if outline != outlines_extended.to_simple(canonical_outline):
+#                word = f'[Use {canonical_outline} for {word!r}]'
+#
+#        new_dictionary[outline] = word
+#    dictionary = new_dictionary
+#    save_dictionary(f'output/{stage:02}.main.json', dictionary)
 
-        if word in canonical_outlines:
-            canonical_outline = canonical_outlines[word]
-            if outline != outlines_extended.to_simple(canonical_outline):
-                word = f'[Use {canonical_outline} for {word!r}]'
-
-        new_dictionary[outline] = word
-    dictionary = new_dictionary
-    save_dictionary(f'output/{stage:02}.main.json', dictionary)
-
-    stage += 1
-    dictionary = unique_briefs(dictionary)
-    save_dictionary(f'output/{stage:02}.main.json', dictionary)
-
-    stage += 1
-    dictionary = unique_single_strokes(dictionary)
-    save_dictionary(f'output/{stage:02}.main.json', dictionary)
+#    stage += 1
+#    dictionary = unique_briefs(dictionary)
+#    save_dictionary(f'output/{stage:02}.main.json', dictionary)
+#
+#    stage += 1
+#    dictionary = unique_single_strokes(dictionary)
+#    save_dictionary(f'output/{stage:02}.main.json', dictionary)
 
 #    stage += 1
 #    dictionary = canonicalize_outline(dictionary)

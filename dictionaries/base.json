@@ -1,7 +1,7 @@
 [
     {
         "word": "I",
-        "outline": "Eye"
+        "outline": "EU"
     },
     {
         "word": "me",
@@ -381,7 +381,7 @@
     {
         "word": "although",
         "outline": "AL/THO",
-        "note": "This one is a bit hard to refine.",
+        "notes": "This one is a bit hard to refine.",
         "related": ["though"]
     },
     {
@@ -396,5 +396,353 @@
     {
         "word": "unless",
         "outline": "UNLess"
+    },
+    {
+        "word": "I'm",
+        "outline": "*IM"
+    },
+    {
+        "word": "I've",
+        "outline": "*IV"
+    },
+    {
+        "word": "I'll",
+        "outline": "*IL"
+    },
+    {
+        "word": "I'd",
+        "outline": "*ID"
+    },
+    {
+        "word": "you're",
+        "outline": "*UR"
+    },
+    {
+        "word": "you've",
+        "outline": "*UV"
+    },
+    {
+        "word": "you'll",
+        "outline": "*UL"
+    },
+    {
+        "word": "you'd",
+        "outline": "*UD"
+    },
+    {
+        "word": "he's",
+        "outline": "H*ES"
+    },
+    {
+        "word": "he'll",
+        "outline": "H*EL"
+    },
+    {
+        "word": "he'd",
+        "outline": "H*ED"
+    },
+    {
+        "word": "she's",
+        "outline": "SH*ES"
+    },
+    {
+        "word": "she'll",
+        "outline": "SH*EL"
+    },
+    {
+        "word": "she'd",
+        "outline": "SH*ED"
+    },
+    {
+        "word": "it's",
+        "outline": "*TS"
+    },
+    {
+        "word": "it'd",
+        "outline": "*TD"
+    },
+    {
+        "word": "it'll",
+        "outline": "*LT"
+    },
+    {
+        "word": "we're",
+        "outline": ""
+    },
+    {
+        "word": "we've",
+        "outline": ""
+    },
+    {
+        "word": "we'll",
+        "outline": "W*EL"
+    },
+    {
+        "word": "we'd",
+        "outline": "W*ED"
+    },
+    {
+        "word": "they're",
+        "outline": "TH*ER"
+    },
+    {
+        "word": "they've",
+        "outline": "TH*EV"
+    },
+    {
+        "word": "they'll",
+        "outline": "TH*EL"
+    },
+    {
+        "word": "they'd",
+        "outline": "TH*ED"
+    },
+    {
+        "word": "aren't",
+        "outline": "R-NT"
+    },
+    {
+        "word": "can't",
+        "outline": "KANT"
+    },
+    {
+        "word": "couldn't",
+        "outline": "CONT"
+    },
+    {
+        "word": "didn't",
+        "outline": "DINT"
+    },
+    {
+        "word": "doesn't",
+        "outline": ""
+    },
+    {
+        "word": "don't",
+        "outline": "DON"
+    },
+    {
+        "word": "hasn't",
+        "outline": ""
+    },
+    {
+        "word": "haven't",
+        "outline": ""
+    },
+    {
+        "word": "hadn't",
+        "outline": ""
+    },
+    {
+        "word": "isn't",
+        "outline": ""
+    },
+    {
+        "word": "shouldn't",
+        "outline": ""
+    },
+    {
+        "word": "wasn't",
+        "outline": ""
+    },
+    {
+        "word": "weren't",
+        "outline": ""
+    },
+    {
+        "word": "won't",
+        "outline": ""
+    },
+    {
+        "word": "wouldn't",
+        "outline": ""
+    },
+    {
+        "word": "here's",
+        "outline": ""
+    },
+    {
+        "word": "how'd",
+        "outline": ""
+    },
+    {
+        "word": "how",
+        "outline": ""
+    },
+    {
+        "word": "how's",
+        "outline": ""
+    },
+    {
+        "word": "how",
+        "outline": ""
+    },
+    {
+        "word": "that'll",
+        "outline": ""
+    },
+    {
+        "word": "that's",
+        "outline": ""
+    },
+    {
+        "word": "there'll",
+        "outline": ""
+    },
+    {
+        "word": "there's",
+        "outline": ""
+    },
+    {
+        "word": "what'll",
+        "outline": ""
+    },
+    {
+        "word": "what's",
+        "outline": ""
+    },
+    {
+        "word": "what",
+        "outline": ""
+    },
+    {
+        "word": "when's",
+        "outline": ""
+    },
+    {
+        "word": "where's",
+        "outline": ""
+    },
+    {
+        "word": "who'd",
+        "outline": ""
+    },
+    {
+        "word": "who'll",
+        "outline": ""
+    },
+    {
+        "word": "who's",
+        "outline": ""
+    },
+    {
+        "word": "be",
+        "outline": "-B"
+    },
+    {
+        "word": "being",
+        "outline": "-BG"
+    },
+    {
+        "word": "am",
+        "outline": "AM"
+    },
+    {
+        "word": "are",
+        "outline": "R"
+    },
+    {
+        "word": "is",
+        "outline": "S"
+    },
+    {
+        "word": "was",
+        "outline": "WAS",
+        "mistakes": ["WAS"]
+    },
+    {
+        "word": "been",
+        "outline": "B-N"
+    },
+    {
+        "word": "do",
+        "outline": "DO"
+    },
+    {
+        "word": "doing",
+        "outline": "DO/G"
+    },
+    {
+        "word": "does",
+        "outline": "DOS",
+        "notes": "I'm not sure I like this one."
+    },
+    {
+        "word": "did",
+        "outline": "DID"
+    },
+    {
+        "word": "done",
+        "outline": "DUN"
+    },
+    {
+        "word": "have",
+        "outline": "V"
+    },
+    {
+        "word": "having",
+        "outline": "V-G"
+    },
+    {
+        "word": "has",
+        "outline": "HAS",
+        "mistakes": "HAZ"
+    },
+    {
+        "word": "had",
+        "outline": "H"
+    },
+    {
+        "word": "could",
+        "outline": "KO"
+    },
+    {
+        "word": "should",
+        "outline": "SHO"
+    },
+    {
+        "word": "would",
+        "outline": "WO"
+    },
+    {
+        "word": "can",
+        "outline": "KAN"
+    },
+    {
+        "word": "may",
+        "outline": "MAy"
+    },
+    {
+        "word": "must",
+        "outline": "MUSt"
+    },
+    {
+        "word": "will",
+        "outline": "WIL"
+    },
+    {
+        "word": "shall",
+        "outline": "SHAL"
+    },
+    {
+        "word": "might",
+        "outline": "MEyeT"
+    },
+    {
+        "word": "ought",
+        "outline": "AwT"
+    },
+    {
+        "word": "need",
+        "outline": "NEeD"
+    },
+    {
+        "word": "dare",
+        "outline": "DAyR"
+    },
+    {
+        "word": "used",
+        "outline": "YooS/D",
+        "notes": "I don't like this one"
     }
 ]
