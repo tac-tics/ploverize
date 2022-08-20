@@ -155,6 +155,7 @@ def stroke_to_simple(stroke):
             .replace('Sh', 'RB')
             .replace('Ch', 'FP')
             .replace('J', 'PBLG')
+            .replace('Lf', 'FL')
             .replace('Tion', 'GS')
     )
 

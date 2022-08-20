@@ -1,0 +1,389 @@
+[
+    {
+        "word": "I",
+        "outline": "Eye"
+    },
+    {
+        "word": "me",
+        "outline": "ME"
+    },
+    {
+        "word": "my",
+        "outline": "MI"
+    },
+    {
+        "word": "myself",
+        "outline": "[my]/S*ELf"
+    },
+    {
+        "word": "mine",
+        "outline": "MEyeN"
+    },
+    {
+        "word": "you",
+        "outline": "U"
+    },
+    {
+        "word": "your",
+        "outline": "UR"
+    },
+    {
+        "word": "yourself",
+        "outline": "[your]/S*ELf"
+    },
+    {
+        "word": "yourselves",
+        "outline": "[your]/S*ELfZ"
+    },
+    {
+        "word": "yours",
+        "outline": "",
+        "mistakes": ["URZ"],
+        "notes": "Could be produced with -s suffix"
+    },
+    {
+        "word": "he",
+        "outline": "HE"
+    },
+    {
+        "word": "him",
+        "outline": "HIM"
+    },
+    {
+        "word": "his",
+        "outline": "HIS"
+    },
+    {
+        "word": "himself",
+        "outline": "[him]/S*ELf"
+    },
+    {
+        "word": "she",
+        "outline": "SHE"
+    },
+    {
+        "word": "her",
+        "outline": "HER"
+    },
+    {
+        "word": "herself",
+        "outline": "[her]/S*ELf"
+    },
+    {
+        "word": "hers",
+        "outline": "HERS"
+    },
+    {
+        "word": "it",
+        "outline": "-T"
+    },
+    {
+        "word": "its",
+        "outline": "-TS"
+    },
+    {
+        "word": "itself",
+        "outline": "[it]/S*ELf"
+    },
+    {
+        "word": "we",
+        "outline": "WE"
+    },
+    {
+        "word": "us",
+        "outline": "US"
+    },
+    {
+        "word": "our",
+        "outline": "OUR"
+    },
+    {
+        "word": "ourselves",
+        "outline": "[our]/S*ELfZ"
+    },
+    {
+        "word": "ours",
+        "outline": "OURS",
+        "mistakes": ["OURZ"],
+        "notes": "Could be produced with -s suffix"
+    },
+    {
+        "word": "they",
+        "outline": "THE"
+    },
+    {
+        "word": "them",
+        "outline": "THEM"
+    },
+    {
+        "word": "themselves",
+        "outline": "[them]/S*ELfZ"
+    },
+    {
+        "word": "their",
+        "outline": "THER",
+        "related": ["they're", "there"]
+    },
+    {
+        "word": "theirs",
+        "outline": "THERS",
+        "notes": "Could be produced with -s suffix"
+    },
+    {
+        "word": "this",
+        "outline": "TH"
+    },
+    {
+        "word": "these",
+        "outline": "THES",
+        "related": ["those"]
+    },
+    {
+        "word": "here",
+        "outline": "HR"
+    },
+    {
+        "word": "that",
+        "outline": "THA",
+        "related": ["this"]
+    },
+    {
+        "word": "those",
+        "outline": "THOS",
+        "related": ["these"]
+    },
+    {
+        "word": "there",
+        "outline": "THR"
+    },
+    {
+        "word": "who",
+        "outline": "WHO"
+    },
+    {
+        "word": "whom",
+        "outline": "WHOM"
+    },
+    {
+        "word": "what",
+        "outline": "WHA"
+    },
+    {
+        "word": "which",
+        "outline": "WHICh"
+    },
+    {
+        "word": "whose",
+        "outline": "WHOS",
+        "mistakes": "WHOZ"
+    },
+    {
+        "word": "other",
+        "outline": ""
+    },
+    {
+        "word": "others",
+        "outline": ""
+    },
+    {
+        "word": "another",
+        "outline": ""
+    },
+    {
+        "word": "each",
+        "outline": ""
+    },
+    {
+        "word": "enough",
+        "outline": ""
+    },
+    {
+        "word": "either",
+        "outline": ""
+    },
+    {
+        "word": "neither",
+        "outline": ""
+    },
+    {
+        "word": "any",
+        "outline": ""
+    },
+    {
+        "word": "anybody",
+        "outline": ""
+    },
+    {
+        "word": "anyone",
+        "outline": ""
+    },
+    {
+        "word": "anything",
+        "outline": ""
+    },
+    {
+        "word": "every",
+        "outline": ""
+    },
+    {
+        "word": "everyone",
+        "outline": ""
+    },
+    {
+        "word": "everybody",
+        "outline": ""
+    },
+    {
+        "word": "everything",
+        "outline": ""
+    },
+    {
+        "word": "some",
+        "outline": ""
+    },
+    {
+        "word": "someone",
+        "outline": ""
+    },
+    {
+        "word": "somebody",
+        "outline": ""
+    },
+    {
+        "word": "something",
+        "outline": ""
+    },
+    {
+        "word": "no",
+        "outline": ""
+    },
+    {
+        "word": "none",
+        "outline": ""
+    },
+    {
+        "word": "nobody",
+        "outline": ""
+    },
+    {
+        "word": "nothing",
+        "outline": ""
+    },
+    {
+        "word": "one",
+        "outline": ""
+    },
+    {
+        "word": "all",
+        "outline": ""
+    },
+    {
+        "word": "few",
+        "outline": ""
+    },
+    {
+        "word": "fewer",
+        "outline": ""
+    },
+    {
+        "word": "fewest",
+        "outline": ""
+    },
+    {
+        "word": "many",
+        "outline": ""
+    },
+    {
+        "word": "several",
+        "outline": ""
+    },
+    {
+        "word": "more",
+        "outline": ""
+    },
+    {
+        "word": "most",
+        "outline": ""
+    },
+    {
+        "word": "much",
+        "outline": ""
+    },
+    {
+        "word": "such",
+        "outline": ""
+    },
+    {
+        "word": "a",
+        "outline": ""
+    },
+    {
+        "word": "an",
+        "outline": ""
+    },
+    {
+        "word": "the",
+        "outline": "T"
+    },
+    {
+        "word": "when",
+        "outline": "WHEN"
+    },
+    {
+        "word": "where",
+        "outline": ""
+    },
+    {
+        "word": "why",
+        "outline": "WHEye"
+    },
+    {
+        "word": "how",
+        "outline": "HOw"
+    },
+    {
+        "word": "and",
+        "outline": "AND"
+    },
+    {
+        "word": "but",
+        "outline": "BUT"
+    },
+    {
+        "word": "or",
+        "outline": "OR"
+    },
+    {
+        "word": "nor",
+        "outline": "NOR"
+    },
+    {
+        "word": "for",
+        "outline": "FOR"
+    },
+    {
+        "word": "yet",
+        "outline": "YET"
+    },
+    {
+        "word": "so",
+        "outline": "SO"
+    },
+    {
+        "word": "although",
+        "outline": ""
+    },
+    {
+        "word": "because",
+        "outline": "KUZ",
+        "mistake": "KAUS"
+    },
+    {
+        "word": "since",
+        "outline": "SINS"
+    },
+    {
+        "word": "unless",
+        "outline": ""
+    }
+]
