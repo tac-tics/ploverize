@@ -367,10 +367,6 @@
         "outline": "NOR"
     },
     {
-        "word": "for",
-        "outline": "FOR"
-    },
-    {
         "word": "yet",
         "outline": "YET"
     },
@@ -499,63 +495,63 @@
     },
     {
         "word": "aren't",
-        "outline": "R-NT"
+        "outline": "R-Nt"
     },
     {
         "word": "can't",
-        "outline": "KANT"
+        "outline": "K-Nt"
     },
     {
         "word": "couldn't",
-        "outline": "CONT"
+        "outline": "K-Dnt"
     },
     {
         "word": "didn't",
-        "outline": "DINT"
+        "outline": "D-Dnt"
     },
     {
         "word": "doesn't",
-        "outline": ""
+        "outline": "D-Snt"
     },
     {
         "word": "don't",
-        "outline": "DON"
+        "outline": "DONt"
     },
     {
         "word": "hasn't",
-        "outline": ""
+        "outline": "H-Snt"
     },
     {
         "word": "haven't",
-        "outline": ""
+        "outline": "V-Nt"
     },
     {
         "word": "hadn't",
-        "outline": ""
+        "outline": "H-Dnt"
     },
     {
         "word": "isn't",
-        "outline": ""
+        "outline": "S-Nt"
     },
     {
         "word": "shouldn't",
-        "outline": ""
+        "outline": "SH-Dnt"
     },
     {
         "word": "wasn't",
-        "outline": ""
+        "outline": "W-Snt"
     },
     {
         "word": "weren't",
-        "outline": ""
+        "outline": "WR-Nt"
     },
     {
         "word": "won't",
-        "outline": ""
+        "outline": "W-Nt"
     },
     {
         "word": "wouldn't",
-        "outline": ""
+        "outline": "W-Dnt"
     },
     {
         "word": "here's",
@@ -647,8 +643,12 @@
     },
     {
         "word": "was",
-        "outline": "WAS",
+        "outline": "W-S",
         "mistakes": ["WAS"]
+    },
+    {
+        "word": "were",
+        "outline": "WR"
     },
     {
         "word": "been",
@@ -656,24 +656,24 @@
     },
     {
         "word": "do",
-        "outline": "DO"
+        "outline": "D"
     },
     {
         "word": "doing",
-        "outline": "DO/G"
+        "outline": "D-G"
     },
     {
         "word": "does",
-        "outline": "DOS",
+        "outline": "D-S",
         "notes": "I'm not sure I like this one."
     },
     {
         "word": "did",
-        "outline": "DID"
+        "outline": "D-D"
     },
     {
         "word": "done",
-        "outline": "DUN"
+        "outline": "D-N"
     },
     {
         "word": "have",
@@ -685,8 +685,8 @@
     },
     {
         "word": "has",
-        "outline": "HAS",
-        "mistakes": "HAZ"
+        "outline": "H-Z",
+        "mistakes": ["HAZ", "HAS"]
     },
     {
         "word": "had",
@@ -694,19 +694,19 @@
     },
     {
         "word": "could",
-        "outline": "KO"
+        "outline": "K-D"
     },
     {
         "word": "should",
-        "outline": "SHO"
+        "outline": "SH-D"
     },
     {
         "word": "would",
-        "outline": "WO"
+        "outline": "W-D"
     },
     {
         "word": "can",
-        "outline": "KAN"
+        "outline": "K-"
     },
     {
         "word": "may",
@@ -718,7 +718,7 @@
     },
     {
         "word": "will",
-        "outline": "WIL"
+        "outline": "W-L"
     },
     {
         "word": "shall",
@@ -744,5 +744,279 @@
         "word": "used",
         "outline": "YooS/D",
         "notes": "I don't like this one"
+    },
+    {
+        "word": "aboard",
+        "outline": ""
+    },
+    {
+        "word": "about",
+        "outline": "ABT"
+    },
+    {
+        "word": "above",
+        "outline": ""
+    },
+    {
+        "word": "across",
+        "outline": ""
+    },
+    {
+        "word": "after",
+        "outline": "AF"
+    },
+    {
+        "word": "against",
+        "outline": ""
+    },
+    {
+        "word": "along",
+        "outline": ""
+    },
+    {
+        "word": "amid",
+        "outline": ""
+    },
+    {
+        "word": "among",
+        "outline": ""
+    },
+    {
+        "word": "anti",
+        "outline": ""
+    },
+    {
+        "word": "around",
+        "outline": ""
+    },
+    {
+        "word": "as",
+        "outline": "AS",
+        "mistakes": ["AZ"]
+    },
+    {
+        "word": "at",
+        "outline": "AT"
+    },
+    {
+        "word": "before",
+        "outline": "B-F"
+    },
+    {
+        "word": "behind",
+        "outline": ""
+    },
+    {
+        "word": "below",
+        "outline": ""
+    },
+    {
+        "word": "beneath",
+        "outline": ""
+    },
+    {
+        "word": "beside",
+        "outline": ""
+    },
+    {
+        "word": "besides",
+        "outline": ""
+    },
+    {
+        "word": "between",
+        "outline": ""
+    },
+    {
+        "word": "beyond",
+        "outline": ""
+    },
+    {
+        "word": "by",
+        "outline": "BI",
+        "related": ["buy"]
+    },
+    {
+        "word": "concerning",
+        "outline": ""
+    },
+    {
+        "word": "considering",
+        "outline": ""
+    },
+    {
+        "word": "despite",
+        "outline": ""
+    },
+    {
+        "word": "down",
+        "outline": ""
+    },
+    {
+        "word": "during",
+        "outline": ""
+    },
+    {
+        "word": "except",
+        "outline": ""
+    },
+    {
+        "word": "excepting",
+        "outline": ""
+    },
+    {
+        "word": "excluding",
+        "outline": ""
+    },
+    {
+        "word": "following",
+        "outline": ""
+    },
+    {
+        "word": "for",
+        "outline": "FOR"
+    },
+    {
+        "word": "from",
+        "outline": "FROM"
+    },
+    {
+        "word": "in",
+        "outline": "-N"
+    },
+    {
+        "word": "inside",
+        "outline": "-NS"
+    },
+    {
+        "word": "into",
+        "outline": "-N/TO"
+    },
+    {
+        "word": "like",
+        "outline": "LEyeCk"
+    },
+    {
+        "word": "minus",
+        "outline": ""
+    },
+    {
+        "word": "near",
+        "outline": ""
+    },
+    {
+        "word": "of",
+        "outline": "-F"
+    },
+    {
+        "word": "off",
+        "outline": "OF"
+    },
+    {
+        "word": "on",
+        "outline": "ON"
+    },
+    {
+        "word": "onto",
+        "outline": "ONT"
+    },
+    {
+        "word": "opposite",
+        "outline": ""
+    },
+    {
+        "word": "outside",
+        "outline": "OwTS"
+    },
+    {
+        "word": "over",
+        "outline": "OhR"
+    },
+    {
+        "word": "past",
+        "outline": "PASt"
+    },
+    {
+        "word": "per",
+        "outline": "PER"
+    },
+    {
+        "word": "plus",
+        "outline": ""
+    },
+    {
+        "word": "regarding",
+        "outline": ""
+    },
+    {
+        "word": "round",
+        "outline": ""
+    },
+    {
+        "word": "save",
+        "outline": ""
+    },
+    {
+        "word": "than",
+        "outline": "THAN"
+    },
+    {
+        "word": "through",
+        "outline": ""
+    },
+    {
+        "word": "to",
+        "outline": ""
+    },
+    {
+        "word": "toward",
+        "outline": ""
+    },
+    {
+        "word": "towards",
+        "outline": ""
+    },
+    {
+        "word": "under",
+        "outline": ""
+    },
+    {
+        "word": "underneath",
+        "outline": ""
+    },
+    {
+        "word": "unlike",
+        "outline": ""
+    },
+    {
+        "word": "until",
+        "outline": ""
+    },
+    {
+        "word": "up",
+        "outline": "UP"
+    },
+    {
+        "word": "upon",
+        "outline": ""
+    },
+    {
+        "word": "versus",
+        "outline": "V-S"
+    },
+    {
+        "word": "via",
+        "outline": ""
+    },
+    {
+        "word": "with",
+        "outline": "W-T"
+    },
+    {
+        "word": "within",
+        "outline": "W-NT"
+    },
+    {
+        "word": "without",
+        "outline": "WOwT"
     }
 ]
