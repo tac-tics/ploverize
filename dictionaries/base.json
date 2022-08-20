@@ -239,55 +239,64 @@
     },
     {
         "word": "some",
-        "outline": ""
+        "outline": "SOM",
+        "related": ["sum"]
     },
     {
         "word": "someone",
-        "outline": ""
+        "outline": "SM-N"
     },
     {
         "word": "somebody",
-        "outline": ""
+        "outline": "SM-B"
     },
     {
         "word": "something",
+        "outline": "SM-G"
+    },
+    {
+        "word": "somewhere",
         "outline": ""
     },
     {
         "word": "no",
-        "outline": ""
+        "outline": "NO"
     },
     {
         "word": "none",
-        "outline": ""
+        "outline": "NUN",
+        "related": ["nun"]
     },
     {
         "word": "nobody",
-        "outline": ""
+        "outline": "NOB",
+        "related": ["knob"]
     },
     {
         "word": "nothing",
-        "outline": ""
+        "outline": "NOG",
+        "related": ["nog"]
     },
     {
         "word": "one",
-        "outline": ""
+        "outline": "WUN",
+        "related": ["won"]
     },
     {
         "word": "all",
-        "outline": ""
+        "outline": "AwL"
     },
     {
         "word": "few",
-        "outline": ""
+        "outline": "FYoo"
     },
     {
         "word": "fewer",
-        "outline": ""
+        "outline": "FYooR"
     },
     {
         "word": "fewest",
-        "outline": ""
+        "outline": "FYooSt"
     },
     {
         "word": "many",

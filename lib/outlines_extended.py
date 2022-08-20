@@ -157,6 +157,7 @@ def stroke_to_simple(stroke):
             .replace('J', 'PBLG')
             .replace('Lf', 'FL')
             .replace('Tion', 'GS')
+            .replace('St', 'FT')
     )
 
     if middle == '' and right != '':
