@@ -398,8 +398,8 @@ def main():
     stage = 0
 #    dictionary = filter_mistakes(dictionary)
 #    save_dictionary(f'output/{stage:02}.main.json', dictionary)
-
-    # make sure this just loads, okay?
+#
+#    # make sure this just loads, okay?
 #    personal_dictionary = load_dictionary_path('dictionaries/main.dict')
 #    canonical_outlines = {}
 #    for outline, word in personal_dictionary.items():
@@ -453,7 +453,7 @@ def main():
 #        new_dictionary[outline] = word
 #    dictionary = new_dictionary
 #    save_dictionary(f'output/{stage:02}.main.json', dictionary)
-
+#
 #    stage += 1
 #    dictionary = unique_briefs(dictionary)
 #    save_dictionary(f'output/{stage:02}.main.json', dictionary)
