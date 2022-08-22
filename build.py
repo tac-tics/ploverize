@@ -376,6 +376,34 @@ def make_fingerspelling_dictionary():
     }
 
 
+def merge_with(dictionary, other_dictionary):
+    new_dictionary = copy(dictionary)
+
+    canonical_outlines = {}
+    for outline, word in dictionary.items():
+        if word not in canonical_outlines:
+            canonical_outlines[word] = outline
+
+    for outline, word in other_dictionary.items():
+        if word not in MAIN_WORDS:
+            continue
+
+        if outline in dictionary:
+            continue
+
+        if word in canonical_outlines:
+            canonical_outline = canonical_outlines[word]
+            if outline == canonical_outline:
+                continue
+            else:
+                word = f'[Use {canonical_outline} for {word!r}]'
+                new_dictionary[outline] = word
+        else:
+            new_dictionary[outline] = word
+
+    return new_dictionary
+
+
 def main():
     #clean_output_dir()
 
@@ -389,11 +417,8 @@ def main():
     #dictionary = only_uniques(partition_main(main_dictionary))
     #dictionary = add_henkan_bypass(dictionary, main_dictionary)
 
-#    for outline, word in lapwing_dictionary.items():
-#        if word in MAIN_WORDS:
-#            dictionary[outline] = word
-
     dictionary = dict_from_base.build_dict()
+    dictionary = merge_with(dictionary, main_dictionary)
 
     stage = 0
 #    dictionary = filter_mistakes(dictionary)
