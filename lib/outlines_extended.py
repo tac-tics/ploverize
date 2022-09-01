@@ -145,9 +145,9 @@ def stroke_to_simple(stroke):
 
     right = (
         right
-            .replace('Nt', 'TS')
-            .replace('Dnt', 'TSD')
-            .replace('Snt', 'TSZ')
+            .replace('Nt', 'LG')
+            .replace('Dnt', 'LGD')
+            .replace('Snt', 'LGZ')
             .replace('N', 'PB')
             .replace('V', 'F')
             .replace('Ck', 'BG')
