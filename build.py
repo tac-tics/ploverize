@@ -495,6 +495,10 @@ def main():
         dictionary = combine_dictionaries(dictionaries)
         save_dictionary(f'output/{stage:02}.main.json', dictionary)
 
+    with Time('Combine basic words'):
+        basic_dictionary = load_dictionary_path('dictionaries/basic.json')
+        dictionary = merge_with(dictionary, basic_dictionary)
+
 #    stage += 1
 #    new_dictionary = {}
 #    for outline, word in dictionary.items():
