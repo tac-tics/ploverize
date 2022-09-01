@@ -1,3 +1,4 @@
+from contextlib import contextmanager
 from copy import copy
 from pathlib import Path
 from collections import defaultdict
@@ -6,6 +7,7 @@ import json
 import string
 import shutil
 import os.path
+import time
 
 import nltk
 
@@ -209,7 +211,7 @@ def combine_dictionaries(dictionaries):
                     warning = ''
                 else:
                     warning = '(was: ' + old_word + ')'
-                print('Duplicated entry:', outline, word, warning)
+                # print('Duplicated entry:', outline, word, warning)
             new_dictionary[outline] = word
     return new_dictionary
 
@@ -404,21 +406,50 @@ def merge_with(dictionary, other_dictionary):
     return new_dictionary
 
 
+def main_dictionary_words_only():
+    with open('output/main.json') as infile:
+        main_dictionary = json.load(infile)
+
+    with open('output/main.words.json') as infile:
+        words = set(json.load(infile))
+
+    new_dictionary = {}
+    for outline, word in main_dictionary.items():
+        if word in words:
+            new_dictionary[outline] = word
+
+    return new_dictionary
+
+
+@contextmanager
+def Time(*args, **kwds):
+    message = (args[0] if len(args) > 0 else '').ljust(50)
+    print(message, end=' ')
+    sys.stdout.flush()
+    start = time.time()
+    yield
+    end = time.time()
+    duration = (end - start)
+    print(f'{duration:.3f}s')
+
+
 def main():
     #clean_output_dir()
 
-    main_dictionary = load_main_dictionary()
-    save_dictionary('output/main.json', main_dictionary)
+    with Time('load main dictionary words'):
+        main_dictionary = main_dictionary_words_only()
+#    save_dictionary('output/main.json', main_dictionary)
 
-    lapwing_dictionary = load_lapwing_dictionary()
-    save_dictionary('output/lapwing.json', lapwing_dictionary)
+#    lapwing_dictionary = load_lapwing_dictionary()
+#    save_dictionary('output/lapwing.json', lapwing_dictionary)
 
     #dictionary = {}
     #dictionary = only_uniques(partition_main(main_dictionary))
     #dictionary = add_henkan_bypass(dictionary, main_dictionary)
 
-    dictionary = dict_from_base.build_dict()
-    dictionary = merge_with(dictionary, main_dictionary)
+    with Time('build from base'):
+        dictionary = dict_from_base.build_dict()
+#    dictionary = merge_with(dictionary, main_dictionary)
 
     stage = 0
 #    dictionary = filter_mistakes(dictionary)
@@ -461,8 +492,9 @@ def main():
 #        'dictionaries/misc.json',
     ]
     dictionaries = [dictionary] + [load_dictionary_path(d) for d in dictionary_files]
-    dictionary = combine_dictionaries(dictionaries)
-    save_dictionary(f'output/{stage:02}.main.json', dictionary)
+    with Time('Combine dictionaries'):
+        dictionary = combine_dictionaries(dictionaries)
+        save_dictionary(f'output/{stage:02}.main.json', dictionary)
 
 #    stage += 1
 #    new_dictionary = {}
@@ -495,10 +527,12 @@ def main():
 #    dictionary = add_fingerspelling(dictionary)
 #    save_dictionary(f'output/{stage:02}.main.json', dictionary)
 
-    save_dictionary('output/final.json', dictionary)
+    with Time('Saving final dictionary'):
+        save_dictionary('output/final.json', dictionary)
 
-    save_dictionary(f'output/fingerspelling.modal', make_fingerspelling_dictionary())
-    save_dictionary(f'output/mobility.modal', make_mobility_dictionary())
+    with Time('Saving modal and mobility dictionaries'):
+        save_dictionary(f'output/fingerspelling.modal', make_fingerspelling_dictionary())
+        save_dictionary(f'output/mobility.modal', make_mobility_dictionary())
 
 
 if __name__ == "__main__":
