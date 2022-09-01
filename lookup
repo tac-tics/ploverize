@@ -5,9 +5,13 @@ import json
 
 
 search_word = sys.argv[1]
+try:
+    dictionary = sys.argv[2]
+except:
+    dictionary = 'output/final.json'
 
 
-with open('output/final.json') as infile:
+with open(dictionary) as infile:
     dictionary = json.load(infile)
 
 
