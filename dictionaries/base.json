@@ -587,39 +587,35 @@
     },
     {
         "word": "there's",
-        "outline": ""
+        "outline": "THR*S"
     },
     {
         "word": "what'll",
-        "outline": ""
+        "outline": "WHA*L"
     },
     {
         "word": "what's",
-        "outline": ""
-    },
-    {
-        "word": "what",
-        "outline": ""
+        "outline": "WHA*S"
     },
     {
         "word": "when's",
-        "outline": ""
+        "outline": "WH*ENS"
     },
     {
         "word": "where's",
-        "outline": ""
+        "outline": "WHR*S"
     },
     {
         "word": "who'd",
-        "outline": ""
+        "outline": "WHO*D"
     },
     {
         "word": "who'll",
-        "outline": ""
+        "outline": "WHO*L"
     },
     {
         "word": "who's",
-        "outline": ""
+        "outline": "WHO*S"
     },
     {
         "word": "be",

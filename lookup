@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+
+import sys
+import json
+
+
+search_word = sys.argv[1]
+
+
+with open('output/final.json') as infile:
+    dictionary = json.load(infile)
+
+
+for outline, word in dictionary.items():
+    if word == search_word:
+        print(outline)

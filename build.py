@@ -253,7 +253,7 @@ def add_henkan_bypass(dictionary, main_dictionary):
     return new_dictionary
 
 with open('output/main.words.json') as infile:
-    MAIN_WORDS = json.load(infile)
+    MAIN_WORDS = set(json.load(infile))
 
 
 def make_mobility_dictionary():
@@ -369,10 +369,10 @@ def make_fingerspelling_dictionary():
         "exit_on_match": False,
         "ignore_folding": True,
         "entry": {
-            "+TP": "{#}"
+            "#": "{#}"
         },
         "exit": {
-            "+": "{#}"
+            "#": "{#}"
         },
         'dict': new_dictionary,
     }
@@ -436,10 +436,6 @@ def Time(*args, **kwds):
 def main():
     #clean_output_dir()
 
-    with Time('load main dictionary words'):
-        main_dictionary = main_dictionary_words_only()
-#    save_dictionary('output/main.json', main_dictionary)
-
 #    lapwing_dictionary = load_lapwing_dictionary()
 #    save_dictionary('output/lapwing.json', lapwing_dictionary)
 
@@ -449,7 +445,10 @@ def main():
 
     with Time('build from base'):
         dictionary = dict_from_base.build_dict()
-#    dictionary = merge_with(dictionary, main_dictionary)
+
+    with Time('merging common dictionary'):
+        common_dictionary = load_dictionary_path('dictionaries/common.json')
+        dictionary = merge_with(dictionary, common_dictionary)
 
     stage = 0
 #    dictionary = filter_mistakes(dictionary)
