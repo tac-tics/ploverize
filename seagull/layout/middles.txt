@@ -1,0 +1,15 @@
+A       A
+O       O
+E       E
+U       U
+I       EU
+Oo      AO
+Aw      AU
+Ea      AE
+Oh      OE
+Ow      OU
+Yoo     AOU
+Ee      AOE
+Oy      OEU
+Ay      AEU
+Eye     AOEU
