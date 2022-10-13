@@ -34,6 +34,8 @@ There are no multiple-word briefs or phaseology in Seagull. "Words" which contai
 
 The basis for the outlines should be founded in existing theory in most cases. In practice, this means that the outline should be found either in Mirabai Knight's dictionary (main.json in Plover) or else in Aerickt's Lapwing dictionary. If it comes from neither of these, an explanation is required for why the outline departs from either.
 
+The theory shall consist of a core set of English words. The final word list will be built from English-as-a-second-language (ESL) vocabulary lists, acting as a proxy for the most important words in the language. The theory should be large enough that virtually any new word should fit neatly within the spelling rules with little ambiguity.
+
 ## Basis
 
 The author values the tradition in any discipline, even when he is tempted to part with it. For this reason, the core vocabulary
@@ -46,3 +48,21 @@ Some mechanics that Seagull seeks to clarify over traditional stenography theori
 - Henkan.
 - The prefix trie.
 - Formal prefixes and suffixes.
+
+
+## Presentation
+
+A major reason to create a new theory for the author is because existing theories are difficult to learn. The major obstacles are:
+
+- A lack of free access to materials.
+- No central place to learn the rules.
+- No canonical outlines for words.
+
+Seagull will be free. (Donations welcome).
+
+# Validation
+
+- When a word is added, so should all of its homophones.
+- No word should have more than one outline.
+- No word should appear twice.
+- Hints should be given for typos, red herrings, and outlines from main.json.
