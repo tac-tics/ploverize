@@ -19,6 +19,13 @@ All pronouns with singular -self as a suffix work this way.
 - TPHAOEPB mine
 "MEyeN". Note: Even though "I" is spelled orthographically, mine is spelled phonetically. Otherwise, it collides with the homophone "min".
 
+- WE we
+- US us
+- OUR our
+- OURS ours
+- OUR/S*EFL ourself
+- OUR/S*EFLZ ourselves
+
 ## Second Person
 
 - U you

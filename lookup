@@ -8,7 +8,7 @@ search_word = sys.argv[1]
 try:
     dictionary = sys.argv[2]
 except:
-    dictionary = 'output/final.json'
+    dictionary = '/home/tac-tics/projects/ploverize/output/final.json'
 
 
 with open(dictionary) as infile:
